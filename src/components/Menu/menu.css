@@ -1,14 +1,10 @@
-.menu-transition { 
-  transition: width 1s ease-in-out, opacity 1s ease-in-out, height 1s ease-in-out;
-  /* overflow: hidden; */
+ .menu-transition {
+   transition: max-height 500ms ease-in-out, opacity 400ms ease-in-out; 
+  } 
+ .menu-hidden { 
+    max-height: 0; 
+    opacity: 0;
  } 
-.menu-hidden {
-   width: 0; 
-   opacity: 0; 
-   height: 0;
-} 
-.menu-visible { 
-  /* width: 100%; Ajuste conforme necessário  */
-  /* height: 170px; */
-  opacity: 1; 
-}
+ .menu-visible { 
+    max-height: 500px; /* Ajuste conforme necessário */ 
+    opacity: 1; }

@@ -16,10 +16,7 @@ const Menu = () => {
       <FaBars size={24} />
       </button>
 
-        {/* <menu className={clsx('menu-transition', {
-          'menu-hidden': !isOpened,
-          'menu-visible': isOpened
-        })}>
+        <menu className={'hidden md:flex'}>
           <div className="flex justify-between flex-wrap w-full">
           <Link to='/Admin'>
             <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium" aria-label="Admin">Admin</button>
@@ -27,20 +24,8 @@ const Menu = () => {
           <Link to='/cadastro'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Cadastro">Cadastro</button></Link>
           <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Login">Login</button></Link>
         </div>
-      </menu> */}
-        {/* <menu className={clsx(' w-1/3 mr-3 transition-all duration-1000', {
-          'hidden': !isOpened
-        })}>
-          <div className="flex justify-between">
-          <Link to='/Admin'>
-            <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium" aria-label="Admin">Admin</button>
-          </Link>
-          <Link to='/cadastro'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Cadastro">Cadastro</button></Link>
-          <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Login">Login</button></Link>
-        </div>
-      </menu> */}
-
-
+      </menu>
+       
       </header>
       <menu className={clsx('menu-transition bg-gcor p-1', {
         'menu-hidden': !isOpened,
@@ -60,14 +45,3 @@ const Menu = () => {
 }
 
 export default Menu;
-
-
-{/* <div className="">
-        <menu className="flex justify-between w-1/3 mr-3">
-          <Link to='/Admin'>
-            <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium" aria-label="Admin">Admin</button>
-          </Link>
-          <Link to='/cadastro'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Cadastro">Cadastro</button></Link>
-          <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Login">Login</button></Link>
-        </menu>
-      </div> */}
