@@ -1,0 +1,14 @@
+.menu-transition { 
+  transition: width 1s ease-in-out, opacity 1s ease-in-out, height 1s ease-in-out;
+  /* overflow: hidden; */
+ } 
+.menu-hidden {
+   width: 0; 
+   opacity: 0; 
+   height: 0;
+} 
+.menu-visible { 
+  /* width: 100%; Ajuste conforme necessário  */
+  /* height: 170px; */
+  opacity: 1; 
+}
