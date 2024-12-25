@@ -1,22 +1,42 @@
 
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { FormEvent, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdArrowRoundBack, IoMdLock, IoMdMail } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
+import { auth } from "../../services";
 
 
 const Login = () => {
   // 1318X642
     const [userEmail, setUserEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate()
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    signInWithEmailAndPassword(auth, userEmail, passWord).then((result) => {
+      console.log('result :>> ', result.user.email);
+      setLoading(true)
+      // dispatch(isLogged(result.user.email!))
+
+      navigate('/', { replace: true })
+    }).catch((err) => {
+      setLoading(false)
+      console.log(err.code);
+    }).finally(() => {
+      setLoading(false)
+
+    })
+
   }
   return (
     <section className="h-screen flex flex-col p-2 video" >
+      {loading && <h1 className="">carregando</h1>}
 
 
-      <div className="bg-gcor p-2 w-12 h-12 flex justify-center items-center rounded-full mt-6  shadow-lg">
+      <div className="bg-gcor p-2 w-12 h-12 flex justify-center items-center rounded-full   shadow-lg md:mt-6 md:ml-6 mb-2 md:mb-0">
         <Link to='/'>
           <IoMdArrowRoundBack color="#fff" size={24} />
         </Link>
@@ -27,13 +47,13 @@ const Login = () => {
 
         <form className="w-[100%] md:w-full p-2 h-3/4 flex flex-col justify-center items-center   rounded-3xl" onSubmit={handleSubmit}>
           <div className="relative w-full md:w-3/4 mb-12">
-            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg" aria-label="email" placeholder="Digite seu email..." />
+            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg" aria-label="email" placeholder="Digite seu email..." onChange={(e)=>setUserEmail(e.target.value)} autoComplete="email"/>
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdMail className="text-vviolet" size={24} />
             </span>
           </div>
           <div className="relative w-full md:w-3/4">
-            <input type="password" id='pass' className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg" aria-label="password" placeholder="Digite sua senha..." />
+            <input type="password" id='pass' className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg" aria-label="password" placeholder="Digite sua senha..." onChange={(e) => setPassWord(e.target.value)} autoComplete="current-password" />
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdLock className="text-vviolet" size={24} />
             </span>
