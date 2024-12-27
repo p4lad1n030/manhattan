@@ -19,7 +19,12 @@ export default {
     },
   },
   plugins: [
-    function ({ addUtilities }) { addUtilities({ '.bg-gcor': { background: 'linear-gradient(to right, #FF00D9, #4B3265)', }, }); },
+    function ({ addUtilities }) {
+      addUtilities({
+        '.bg-gcor': { background: 'linear-gradient(to right, #FF00D9, #4B3265)', },
+        '.bg-gcor05': { background: 'linear-gradient(to right, #FF00D980, #4B326580)', },
+      });
+    },
   ],
 }
 

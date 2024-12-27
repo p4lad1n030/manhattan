@@ -18,6 +18,11 @@ const Login = () => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, userEmail, passWord).then((result) => {
       console.log('result :>> ', result.user.email);
+      const usergirl = result.user.email
+      //abaixo redirecionar o login das garotas diretamente para o seu perfil
+      if (usergirl) {
+
+      }
       setLoading(true)
       // dispatch(isLogged(result.user.email!))
 

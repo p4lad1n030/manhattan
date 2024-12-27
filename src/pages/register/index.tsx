@@ -23,7 +23,7 @@ const Login = () => {
         setLoading(true)
         // dispatch(isLogged(result.user.email!))
 
-        navigate('/', { replace: true })
+        navigate('/createprofile', { replace: true })
       }).catch((err) => {
         setLoading(false)
         console.log(err.code);

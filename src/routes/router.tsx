@@ -4,7 +4,11 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/home";
 import Login from "../pages/login";
 import Admin from "../pages/admin";
-import Cadastro from "../pages/cadastro";
+import Register from "../pages/register";
+import Profile from "../pages/profile";
+import CreateProfile from "../pages/createprofile";
+
+ 
 
 
 
@@ -22,8 +26,16 @@ const router = createBrowserRouter([
     element: <Admin />,
   },
   {
-    path: "/cadastro",
-    element: <Cadastro />,
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+  },
+  {
+    path: "/createprofile",
+    element: <CreateProfile />,
   },
 
 ]);
