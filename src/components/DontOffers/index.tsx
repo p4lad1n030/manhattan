@@ -3,7 +3,7 @@ import { IoIosArrowDropdown } from "react-icons/io";
 import { clsx } from 'clsx';
 
 
-const ServicesOffers = () => {
+const DontOffers = () => {
 
   const [button1, setButton1] = useState<boolean>(false);
   const [button2, setButton2] = useState<boolean>(false);
@@ -40,49 +40,45 @@ const ServicesOffers = () => {
 
 
   const [servicesOffers, setServicesOffers] = useState({
-    sexoVag: false,
-    sexoOral: false,
-    sexoAnal: false,
-    beijoGreg: false,
-    beijoBoca: false,
-    masturb: false,
-    sexoOralSemPreser: false,
-    sexoVirtu: false,
-    penetraComAcessorio: false,
-    utilizzaAcessEroti: false,
-    podolatria: false,
-    striptease: false,
-    massagemTradi: false,
-    massagemTantric: false,
-    duplapenetra: false,
-    triplapenetra: false,
-    domina: false,
-    usaFantasia: false,
-    fazRolePlay: false,
-    podeFilma: false,
-    voyerismo: false,
-    bandag: false,
-    sadomaso: false,
-    fisting: false,
-    faceFuck: false,
-    quirofilia: false,
-    squirt: false,
-    chuvaDourada: false,
-    chuvaMarro: false,
-    trampling: false,
-    acompanha: false,
-    viagem: false,
+    nsexoVag: false,
+    nsexoOral: false,
+    nsexoAnal: false,
+    nbeijoGreg: false,
+    nbeijoBoca: false,
+    nmasturb: false,
+    nsexoOralSemPreser: false,
+    nsexoVirtu: false,
+    npenetraComAcessorio: false,
+    nutilizzaAcessEroti: false,
+    npodolatria: false,
+    nstriptease: false,
+    nmassagemTradi: false,
+    nmassagemTantric: false,
+    nduplapenetra: false,
+    ntriplapenetra: false,
+    ndomina: false,
+    nusaFantasia: false,
+    nfazRolePlay: false,
+    npodeFilma: false,
+    nvoyerismo: false,
+    nbandag: false,
+    nsadomaso: false,
+    nfisting: false,
+    nfaceFuck: false,
+    nquirofilia: false,
+    nsquirt: false,
+    nchuvaDourada: false,
+    nchuvaMarro: false,
+    ntrampling: false,
+    nacompanha: false,
+    nviagem: false,
   });
 
   const handleCheckboxChange = (event: { target: { name: string; checked: boolean; }; }) => {
     const { name, checked } = event.target;
     setServicesOffers((prevServices) => ({ ...prevServices, [name]: checked, }));
   };
-  useEffect(() => {
-    console.log(servicesOffers.sexoVag);
-    console.log(servicesOffers.sexoOral);
 
-  }, [servicesOffers]);
 
   return (
     <div className="w-full mt-4 flex flex-wrap justify-around pt-7">
@@ -90,10 +86,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2">
         <div className="flex items-center w-full   ">
           <div className="w-5 h-5">
-            <input id="checkbox1" type="checkbox" name="sexoVag" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.sexoVag} />
+            <input id="ncheckbox1" type="checkbox" name="nsexoVag" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsexoVag} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox1" className="flex w-full font-ral ">
+          <label htmlFor="ncheckbox1" className="flex w-full font-ral ">
             <h4 className="cursor-pointer text-center font-ral font-semibold" >Sexo Vaginal com Preservativo</h4>
           </label>
           <div className="transition">
@@ -114,10 +110,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2">
         <div className="flex items-center w-full   ">
           <div className="w-5 h-5">
-            <input id="checkbox2" type="checkbox" name="sexoOral" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.sexoOral} />
+            <input id="ncheckbox2" type="checkbox" name="nsexoOral" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsexoOral} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox2" className="flex w-full font-ral ">
+          <label htmlFor="ncheckbox2" className="flex w-full font-ral ">
             <h4 className="cursor-pointer text-center font-ral font-semibold" >Sexo Oral com Preservativo</h4>
           </label>
           <div className="transition">
@@ -139,10 +135,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full  ">
           <div className="w-5 h-5">
-            <input id="checkbox3" type="checkbox" name="sexoAnal" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.sexoAnal} />
+            <input id="ncheckbox3" type="checkbox" name="nsexoAnal" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsexoAnal} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox3" className="flex w-full font-ral ">
+          <label htmlFor="ncheckbox3" className="flex w-full font-ral ">
             <h4 className="cursor-pointer text-center font-ral font-semibold" >Sexo Anal com Preservativo</h4>
           </label>
           <div className="transition">
@@ -165,10 +161,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox4" type="checkbox" name="beijoGreg" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.beijoGreg} />
+            <input id="ncheckbox4" type="checkbox" name="nbeijoGreg" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nbeijoGreg} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox4" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox4" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >     Beijo Grego</h4>
           </label>
           <div className="transition">
@@ -189,10 +185,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox5" type="checkbox" name="beijoBoca" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.beijoBoca} />
+            <input id="ncheckbox5" type="checkbox" name="nbeijoBoca" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nbeijoBoca} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox5" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox5" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >     Beijo na Boca</h4>
           </label>
           <div className="transition">
@@ -213,10 +209,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox6" type="checkbox" name="masturb" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.masturb} />
+            <input id="ncheckbox6" type="checkbox" name="nmasturb" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nmasturb} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox6" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox6" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >     Masturbação</h4>
           </label>
           <div className="transition">
@@ -238,10 +234,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox7" type="checkbox" name="sexoOralSemPreser" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.sexoOralSemPreser} />
+            <input id="ncheckbox7" type="checkbox" name="nsexoOralSemPreser" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsexoOralSemPreser} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox7" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox7" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >     Sexo Oral sem Preservativo</h4>
           </label>
           <div className="transition">
@@ -263,10 +259,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox8" type="checkbox" name="sexoVirtu" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.sexoVirtu} />
+            <input id="ncheckbox8" type="checkbox" name="nsexoVirtu" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsexoVirtu} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox8" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox8" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >     Sexo Virtual</h4>
           </label>
           <div className="transition">
@@ -287,10 +283,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox9" type="checkbox" name="penetraComAcessorio" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.penetraComAcessorio} />
+            <input id="ncheckbox9" type="checkbox" name="npenetraComAcessorio" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.npenetraComAcessorio} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox9" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox9" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >     Penetração com Acessórios Sexuais</h4>
           </label>
           <div className="transition">
@@ -312,10 +308,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox10" type="checkbox" name="utilizzaAcessEroti" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.utilizzaAcessEroti} />
+            <input id="ncheckbox10" type="checkbox" name="nutilizzaAcessEroti" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nutilizzaAcessEroti} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox10" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox10" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Utiliza Acessórios Eróticos</h4>
           </label>
           <div className="transition">
@@ -336,10 +332,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox11" type="checkbox" name="podolatria" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.podolatria} />
+            <input id="ncheckbox11" type="checkbox" name="npodolatria" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.npodolatria} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox11" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox11" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Podolatria</h4>
           </label>
           <div className="transition">
@@ -361,10 +357,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox12" type="checkbox" name="striptease" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.striptease} />
+            <input id="ncheckbox12" type="checkbox" name="nstriptease" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nstriptease} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox12" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox12" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Striptease</h4>
           </label>
           <div className="transition">
@@ -385,10 +381,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox13" type="checkbox" name="massagemTradi" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.massagemTradi} />
+            <input id="ncheckbox13" type="checkbox" name="nmassagemTradi" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nmassagemTradi} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox13" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox13" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Massagem Tradicional</h4>
           </label>
           <div className="transition">
@@ -410,10 +406,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox14" type="checkbox" name="massagemTantric" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.massagemTantric} />
+            <input id="ncheckbox14" type="checkbox" name="nmassagemTantric" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nmassagemTantric} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox14" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox14" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Massagem Tântrica</h4>
           </label>
           <div className="transition">
@@ -435,10 +431,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox15" type="checkbox" name="duplapenetra" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.duplapenetra} />
+            <input id="ncheckbox15" type="checkbox" name="nduplapenetra" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nduplapenetra} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox15" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox15" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Dupla Penetração</h4>
           </label>
           <div className="transition">
@@ -460,10 +456,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox16" type="checkbox" name="triplapenetra" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.triplapenetra} />
+            <input id="ncheckbox16" type="checkbox" name="ntriplapenetra" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.ntriplapenetra} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox16" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox16" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Tripla Penetração</h4>
           </label>
           <div className="transition">
@@ -485,10 +481,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox17" type="checkbox" name="domina" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.domina} />
+            <input id="ncheckbox17" type="checkbox" name="ndomina" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.ndomina} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox17" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox17" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Dominação</h4>
           </label>
           <div className="transition">
@@ -510,10 +506,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox18" type="checkbox" name="usaFantasia" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.usaFantasia} />
+            <input id="ncheckbox18" type="checkbox" name="nusaFantasia" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nusaFantasia} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox18" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox18" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Usa Roupas Fantasiosas ou Uniformes</h4>
           </label>
           <div className="transition">
@@ -534,10 +530,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox19" type="checkbox" name="fazRolePlay" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.fazRolePlay} />
+            <input id="ncheckbox19" type="checkbox" name="nfazRolePlay" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nfazRolePlay} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox19" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox19" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Faz Role Play</h4>
           </label>
           <div className="transition">
@@ -558,10 +554,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox20" type="checkbox" name="podeFilma" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.podeFilma} />
+            <input id="ncheckbox20" type="checkbox" name="npodeFilma" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.npodeFilma} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox20" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox20" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Permite Filmagem</h4>
           </label>
           <div className="transition">
@@ -582,10 +578,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox21" type="checkbox" name="voyerismo" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.voyerismo} />
+            <input id="ncheckbox21" type="checkbox" name="nvoyerismo" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nvoyerismo} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox21" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox21" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Sexo com voyeurismo/ser voyeur</h4>
           </label>
           <div className="transition">
@@ -606,10 +602,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox22" type="checkbox" name="bandag" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.bandag} />
+            <input id="ncheckbox22" type="checkbox" name="nbandag" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nbandag} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox22" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox22" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Bondage</h4>
           </label>
           <div className="transition">
@@ -630,10 +626,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox23" type="checkbox" name="sadomaso" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.sadomaso} />
+            <input id="ncheckbox23" type="checkbox" name="nsadomaso" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsadomaso} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox23" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox23" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Sadomasoquismo</h4>
           </label>
           <div className="transition">
@@ -655,10 +651,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox24" type="checkbox" name="fisting" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.fisting} />
+            <input id="ncheckbox24" type="checkbox" name="nfisting" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nfisting} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox24" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox24" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Fisting</h4>
           </label>
           <div className="transition">
@@ -680,10 +676,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox25" type="checkbox" name="faceFuck" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.faceFuck} />
+            <input id="ncheckbox25" type="checkbox" name="nfaceFuck" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nfaceFuck} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox25" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox25" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Facefuck</h4>
           </label>
           <div className="transition">
@@ -705,10 +701,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox26" type="checkbox" name="quirofilia" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.quirofilia} />
+            <input id="ncheckbox26" type="checkbox" name="nquirofilia" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nquirofilia} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox26" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox26" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Quirofilia</h4>
           </label>
           <div className="transition">
@@ -730,10 +726,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox27" type="checkbox" name="squirt" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.squirt} />
+            <input id="ncheckbox27" type="checkbox" name="nsquirt" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nsquirt} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox27" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox27" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Squirt</h4>
           </label>
           <div className="transition">
@@ -754,10 +750,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox28" type="checkbox" name="chuvaDourada" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.chuvaDourada} />
+            <input id="ncheckbox28" type="checkbox" name="nchuvaDourada" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nchuvaDourada} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox28" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox28" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Chuva Dourada</h4>
           </label>
           <div className="transition">
@@ -778,10 +774,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox29" type="checkbox" name="chuvaMarro" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.chuvaMarro} />
+            <input id="ncheckbox29" type="checkbox" name="nchuvaMarro" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nchuvaMarro} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox29" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox29" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Chuva Marrom</h4>
           </label>
           <div className="transition">
@@ -803,10 +799,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox30" type="checkbox" name="trampling" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.trampling} />
+            <input id="ncheckbox30" type="checkbox" name="ntrampling" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.ntrampling} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox30" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox30" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Trampling</h4>
           </label>
           <div className="transition">
@@ -828,10 +824,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox31" type="checkbox" name="acompanha" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.acompanha} />
+            <input id="ncheckbox31" type="checkbox" name="nacompanha" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nacompanha} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox31" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox31" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Acompanhante</h4>
           </label>
           <div className="transition">
@@ -852,10 +848,10 @@ const ServicesOffers = () => {
       <div className="flex md:w-4/12 flex-col p-2 ">
         <div className="flex items-center w-full ">
           <div className="w-5 h-5 ">
-            <input id="checkbox32" type="checkbox" name="viagem" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.viagem} />
+            <input id="ncheckbox32" type="checkbox" name="nviagem" className="hidden peer " onChange={handleCheckboxChange} checked={servicesOffers.nviagem} />
             <span className="w-4 h-4 inline-block mr-2 border-2 border-gray-400 peer-checked:bg-gcor peer-checked:border-transparent rounded-full" />
           </div>
-          <label htmlFor="checkbox32" className="flex w-full font-ral text-center">
+          <label htmlFor="ncheckbox32" className="flex w-full font-ral text-center">
             <h4 className="cursor-pointer  font-ral font-semibold text-center" >Viagem</h4>
           </label>
           <div className="transition">
@@ -880,7 +876,7 @@ const ServicesOffers = () => {
 }
 
 
-export default ServicesOffers;
+export default DontOffers;
 
 
 

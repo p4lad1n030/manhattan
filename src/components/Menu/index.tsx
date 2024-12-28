@@ -16,13 +16,13 @@ const Menu = () => {
       <FaBars size={24} />
       </button>
 
-        <menu className={'hidden md:flex'}>
+        <menu className={'hidden md:flex w-1/3'}>
           <div className="flex justify-between flex-wrap w-full">
           <Link to='/Admin'>
-            <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium" aria-label="Admin">Admin</button>
+            <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium border-white border hover:border-vviolet" aria-label="Admin">Admin</button>
           </Link>
-          <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Cadastro">Cadastro</button></Link>
-          <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc" aria-label="Login">Login</button></Link>
+            <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border Aceita viajar com seus clientes." aria-label="Cadastro">Cadastro</button></Link>
+            <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border Aceita viajar com seus clientes." aria-label="Login">Login</button></Link>
         </div>
       </menu>
        
@@ -33,10 +33,10 @@ const Menu = () => {
       })}>
         <div className="flex justify-between flex-wrap w-full text-white ">
           <Link to='/Admin'>
-            <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium shadow-lg" aria-label="Admin">Admin</button>
+            <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium shadow-lg border-white border" aria-label="Admin">Admin</button>
           </Link>
-          <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium shadow-lg" aria-label="Cadastro">Cadastro</button></Link>
-          <Link to='/createprofile'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium shadow-lg" aria-label="Login">Login</button></Link>
+          <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium shadow-lg border-white border" aria-label="Cadastro">Cadastro</button></Link>
+          <Link to='/createprofile'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc font-medium shadow-lg border-white border" aria-label="Login">Login</button></Link>
         </div>
       </menu>
       
