@@ -14,7 +14,8 @@ export default {
       colors: {
         'gcor': 'linear-gradient(to right, #FF00D9, #4B3265)',
         'vviolet': '#4B3265',
-        'ppink': '#FF00D9'
+        'ppink': '#FF00D9',
+        'ppink06': '#FF00D999'
       },
     },
   },

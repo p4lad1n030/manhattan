@@ -1,8 +1,9 @@
 
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { FormEvent, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdArrowRoundBack, IoMdLock, IoMdMail } from "react-icons/io";
+import { SiLoop } from "react-icons/si";
 import { Link,  useNavigate } from "react-router-dom";
 import { auth } from "../../services";
 
@@ -12,10 +13,13 @@ const Login = () => {
     const [userEmail, setUserEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
   const navigate = useNavigate()
+  const provider = new GoogleAuthProvider();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     signInWithEmailAndPassword(auth, userEmail, passWord).then((result) => {
       console.log('result :>> ', result.user.email);
       const usergirl = result.user.email
@@ -23,10 +27,10 @@ const Login = () => {
       if (usergirl) {
 
       }
-      setLoading(true)
+      
       // dispatch(isLogged(result.user.email!))
-
-      navigate('/', { replace: true })
+        navigate('/createprofile', { replace: true })
+     
     }).catch((err) => {
       setLoading(false)
       console.log(err.code);
@@ -36,9 +40,45 @@ const Login = () => {
     })
 
   }
+  const SigInG = () => {
+    setLoadingGoogle(true)
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        if (credential?.accessToken) {
+          const token = credential.accessToken;
+          console.log(token);
+        }
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        navigate('/createprofile', { replace: true })
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode , errorMessage);
+        // The email of the user's account used.
+        const email = error.customData.email;
+        console.log(email);
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(credential);
+        // ...
+        setLoadingGoogle(false)
+      }).finally(() => {
+        setLoadingGoogle(false)
+
+      })
+  }
+  
+
   return (
     <section className="h-screen flex flex-col p-2 video" >
-      {loading && <h1 className="">carregando</h1>}
+      
 
 
       <div className="bg-gcor p-2 w-12 h-12 flex justify-center items-center rounded-full   shadow-lg md:mt-6 md:ml-6 mb-2 md:mb-0">
@@ -64,14 +104,16 @@ const Login = () => {
             </span>
           </div>
           <p className="self-end md:mr-24 text-xs text-white font-robotoc shadow-lg">Não possui conta?
-            <Link to={'/cadastro'}><span className="font-semibold underline cursor-pointer"> Registre-se</span></Link></p>
+            <Link to={'/register'}><span className="font-semibold underline cursor-pointer"> Registre-se</span></Link></p>
 
-          <button type="submit" className="bg-vviolet p-2 w-20 rounded-lg hover:bg-white hover:text-ppink font-robotoc font-medium text-white shadow-lg mt-2" aria-label="Acessar">Acessar</button>
+          <button type="submit" className="bg-vviolet p-2 w-20 rounded-lg hover:bg-white hover:text-ppink font-robotoc font-medium text-white shadow-lg mt-2" aria-label="Acessar">
+            {loading ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : 'Acessar'}  
+          </button>
         </form>
         <div className="flex flex-col justify-center items-center my-2">
           <h3 className="font-ral text-xl font-semibold text-white">Ou acesse usando</h3>
-          <button type="button" className="flex justify-center items-center bg-vviolet p-2 w-28 rounded-md hover:bg-white hover:text-ppink font-robotoc font-medium text-white shadow-lg" aria-label="Google">
-               <FcGoogle size={24}/>oogle 
+          <button type="button" className="flex justify-center items-center bg-vviolet p-2 w-28 rounded-md hover:bg-white hover:text-ppink font-robotoc font-medium text-white shadow-lg" aria-label="Google" onClick={SigInG}>
+            {loadingGoogle ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : <><FcGoogle size={24} />oogle</> }   
           </button>
         </div>
 

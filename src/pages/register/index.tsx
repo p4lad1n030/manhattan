@@ -29,7 +29,7 @@ const Login = () => {
         console.log(err.code);
       }).finally(() => {
         setLoading(false)
-
+console.log(loading);
       })
 
   }
@@ -72,7 +72,7 @@ const Login = () => {
         </div>
 
       </article>
-
+    
     </section>
   );
 }

@@ -16,14 +16,14 @@ import { initializeApp } from "firebase/app";
 //   appId: "1:819685822325:web:91d50863c1a3f613fd4d3c"
 // };
 
-//plataforma - nome do projeto - meu perfil! -
+//Projetos - nome do projeto - meu perfil! -
 const firebaseConfig = {
-  apiKey: "AIzaSyDORGz8Mrm35f7kJrASN0A4y32tnGBPmBI",
-  authDomain: "plataforma-56b51.firebaseapp.com",
-  projectId: "plataforma-56b51",
-  storageBucket: "plataforma-56b51.appspot.com",
-  messagingSenderId: "72852026662",
-  appId: "1:72852026662:web:1b8d6a3dd16d356a153de7"
+  apiKey: "AIzaSyDF5Sk5BNm-DjUhdnaogUlBpvq7cEDNys0",
+  authDomain: "projetos-74406.firebaseapp.com",
+  projectId: "projetos-74406",
+  storageBucket: "projetos-74406.firebasestorage.app",
+  messagingSenderId: "736451774990",
+  appId: "1:736451774990:web:2a682d5340fb7079084a5f"
 };
 
 // Initialize Firebase
