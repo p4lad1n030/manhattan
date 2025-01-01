@@ -48,13 +48,13 @@ console.log(loading);
 
         <form className="w-[100%] md:w-full p-2 h-3/4 flex flex-col justify-center items-center   rounded-3xl" onSubmit={handleSubmit}>
           <div className="relative w-full md:w-3/4 mb-12">
-            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg" aria-label="email" placeholder="Digite seu email..." onChange={(e) => setUserEmail(e.target.value)} />
+            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="email" placeholder="Digite seu email..." onChange={(e) => setUserEmail(e.target.value)} />
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdMail className="text-vviolet" size={24} />
             </span>
           </div>
           <div className="relative w-full md:w-3/4">
-            <input type="password" id='pass' className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg" aria-label="password" placeholder="Digite sua senha..." onChange={(e) => setPassWord(e.target.value)} />
+            <input type="password" id='pass' className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="password" placeholder="Digite sua senha..." onChange={(e) => setPassWord(e.target.value)} />
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdLock className="text-vviolet" size={24} />
             </span>
@@ -62,11 +62,11 @@ console.log(loading);
           <p className="self-end md:mr-24 text-xs text-white font-robotoc shadow-lg">Já possui conta?
             <Link to={'/login'}><span className="font-semibold underline cursor-pointer"> Acessar</span></Link></p>
 
-          <button type="submit" className="bg-vviolet p-2 w-20 rounded-lg hover:bg-white hover:text-ppink font-robotoc font-medium text-white shadow-lg mt-2" aria-label="Acessar">Cadastrar</button>
+          <button type="submit" className="bg-vviolet text-white p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet shadow-lg mt-2" aria-label="Acessar">Cadastrar</button>
         </form>
         <div className="flex flex-col justify-center items-center my-2">
           <h3 className="font-ral text-xl font-semibold text-white">Ou cadastre-se com</h3>
-          <button type="button" className="flex justify-center items-center bg-vviolet p-2 w-28 rounded-md hover:bg-white hover:text-ppink font-robotoc font-medium text-white shadow-lg" aria-label="Google">
+          <button type="button" className="flex justify-center items-center p-2 w-28 bg-vviolet rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet font-medium text-white shadow-lg" aria-label="Google">
             <FcGoogle size={24} />oogle
           </button>
         </div>

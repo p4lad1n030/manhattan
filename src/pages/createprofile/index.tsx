@@ -6,9 +6,54 @@ import Input from "../../components/Input";
 import Menu from "../../components/Menu";
 import ServicesOffers from './../../components/servicesOfers/index';
 import Footer from "../../components/footer";
+import { useEffect, useState } from "react";
+
 
 
 const CreateProfile = () => {
+  const [name, setName] = useState<string>('');
+  const [age, setAge] = useState<string>('');
+  const [peso, setPeso] = useState<string>('');
+  const [altura, setAltura] = useState<string>('');
+  const [idioma, setIdioma] = useState<string>('');
+  const [gender, setGender] = useState<string>('');
+  const [smoking, setSmoking] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [eyes, setEyes] = useState<string>('');
+  const [tamCabelo, setTamCabelo] = useState<string>('');
+  const [etnia, setEtnia] = useState<string>('');
+  const [silicone, setSilicone] = useState<string>('');
+  const [tampe, setTampe] = useState<string>('');
+  const [piercing, setPiercing] = useState<string>('');
+
+  const formatarMoeda = (valor: any) => {
+    if (!valor) return ''
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      
+    }).format(valor)
+  }
+  const numberFormat = (e: string, usestate: React.Dispatch<React.SetStateAction<string>>) => {
+    const valor = e.replace(/\D/g, '') // Remove tudo que não é dígito
+    usestate(valor ? formatarMoeda(parseFloat(valor) / 100): '') // Divide por 100 para considerar os centavos
+  }
+  useEffect(() => {
+    console.log('name :>> ', name);
+    console.log('age :>> ', age);
+    console.log('peso :>> ', peso);
+    console.log('altura :>> ', altura);
+    console.log('idioma :>> ', idioma);
+    console.log('gender :>> ', gender);
+    console.log('smoking :>> ', smoking);
+    console.log('message :>> ', message);
+    console.log('eyes :>> ', eyes);
+    console.log('tamCabelo :>> ', tamCabelo);
+
+  
+}, [ peso, altura, idioma , name, age, gender , smoking, message, eyes, tamCabelo]);
+
   return (
     <>
 
@@ -21,41 +66,49 @@ const CreateProfile = () => {
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg px-1">Pra começar, identifique-se, garota</h1>
 
             <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
-              <Input placeholder="Nome" />
-              <Input placeholder=" Idade" />
+              <Input placeholder="Nome" onChange={(e)=>{setName(e.target.value)}} value={name}/>
+              <Input placeholder=" Idade" onChange={(e) => { setAge(e.target.value) }} value={age} />
             </div>
             <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
-              <Input placeholder="Peso" />
-              <Input placeholder="Altura...Ex:1m 80cm" />
-              <Input placeholder="Idioma" />
+              <Input placeholder="Peso" onChange={(e) => { numberFormat(e.target.value, setPeso) }} value={`${peso.slice(2).replace(',', '.')}`} />
+              <Input placeholder="Altura...Ex:1,80" onChange={(e) => { numberFormat(e.target.value, setAltura) }} value={`${altura.slice(2).replace('.', ',')}`} />
+              <select className="border border-zinc-700 w-[198.4px] md:w-3/4 shadow-lg h-9 rounded-md outline-none px-2 -mb-1 md:mb-3 placeholder:font-robotoc" name="select" aria-label="idioma" onChange={(e) => { setIdioma(e.target.value) }} value={idioma}>
+                <option value="Portugês - BR" selected={true}>Portugês - BR</option>
+                <option value="Inglês - USA">Inglês - USA</option>
+                <option value="Espanhol - ES">Espanhol - ES</option>
+              </select>
             </div>
-            <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
-              <Input placeholder=" Genero" />
-              <Input placeholder=" Fumante?" />
+            <div className="flex flex-col h-32 gap-1 my-1 md:mt-8 justify-center items-center md:w-1/3">
+              <select className="border border-zinc-700 w-[198.4px] md:w-3/4 shadow-lg h-9 rounded-md outline-none px-2 placeholder:font-robotoc mb-3 " name="select" aria-label="idioma" onChange={(e) => { setGender(e.target.value) }} value={gender}>
+                <option className="hover:bg-gcor05" value="Mulher - Sis" selected={true}>Mulher - Sis</option>
+                <option value="Trans">Trans</option>
+                
+              </select>
+              <Input placeholder=" Fumante?" onChange={(e) => { setSmoking(e.target.value) }} value={smoking} />
             </div>
 
           </div>
 
           <div className="w-full flex flex-col justify-center items-center relative bg-white  rounded-lg h-56 mb-5">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">Deixe um recado pra atiçar a imaginação deles...</h1>
-            <textarea className="border-2 w-4/5 outline-none shadow-lg placeholder:p-1" onChange={(e) => { console.log(e.target.value); }} rows={5} cols={33} placeholder="Provoque e Prometa...." value={''} />
+            <textarea className="border border-zinc-700 rounded-md w-4/5 outline-none shadow-lg placeholder:p-1" onChange={(e) => { setMessage(e.target.value); }} rows={5} cols={33} placeholder="Provoque e Prometa...." value={message} />
           </div>
 
           <div className="w-full md:flex  items-center relative bg-white  rounded-lg mb-5">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">Agora descreva quem é você, garota!</h1>
 
             <div className="flex flex-col h-32  mt-4 md:my-1 md:mt-8 justify-center items-center md:w-1/3">
-              <Input placeholder="Cor dos olhos" />
+              <Input placeholder="Cor dos olhos" onChange={(e) => { setEyes(e.target.value) }} value={eyes} />
               <Input placeholder=" Cor do cabelo" />
             </div>
             <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
-              <Input placeholder="Cumprimento do cabelo" />
-              <Input placeholder="Etnia" />
-              <Input placeholder="Silicone" />
+              <Input placeholder="Cumprimento do cabelo" onChange={(e) => { setTamCabelo(e.target.value) }} value={tamCabelo} />
+              <Input placeholder="Etnia... Ex: Branca, Parda" onChange={(e) => { setEtnia(e.target.value) }} value={etnia} />
+              <Input placeholder="Silicone" onChange={(e) => { setSilicone(e.target.value) }} value={silicone} />
             </div>
             <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
-              <Input placeholder="Tamanho do pé" />
-              <Input placeholder="Piercing?" />
+              <Input placeholder="Tamanho do pé" onChange={(e) => { setTampe(e.target.value) }} value={tampe} />
+              <Input placeholder="Piercing?" onChange={(e) => { setPiercing(e.target.value) }} value={piercing} />
 
             </div>
 
@@ -93,7 +146,7 @@ const CreateProfile = () => {
           </div>
           <div className="w-full md:flex justify-center  items-center relative bg-white  rounded-lg mb-5 ">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">Agora quanto custa a sua companhia, garota?</h1>
-            <div className="mt-8 flex flex-wrap justify-around items-center w-full md:w-1/2 mb-5">
+            <div className="mt-10 flex flex-wrap justify-around gap-1 items-center w-full md:w-1/2 mb-5">
               <Input placeholder="30 min" />
               <Input placeholder="2 horas" />
               <Input placeholder="3 horas" />

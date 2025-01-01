@@ -21,8 +21,8 @@ const Menu = () => {
             <Link to='/Admin'>
               <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink  font-robotoc font-medium border-white border hover:border-vviolet" aria-label="Admin">Admin</button>
             </Link>
-            <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border Aceita viajar com seus clientes." aria-label="Cadastro">Cadastro</button></Link>
-            <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border Aceita viajar com seus clientes." aria-label="Login">Login</button></Link>
+            <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border" aria-label="Cadastro">Cadastro</button></Link>
+            <Link to='/login'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border" aria-label="Login">Login</button></Link>
           </div>
         </menu>
 
