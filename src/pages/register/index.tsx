@@ -7,7 +7,7 @@ import { auth } from "../../services";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 
-const Login = () => {
+const Register = () => {
   // 1318X642
   const [userEmail, setUserEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
@@ -15,12 +15,12 @@ const Login = () => {
   const navigate = useNavigate()
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     createUserWithEmailAndPassword(auth, userEmail, passWord)
       .then((userCredential) => {
         // Signed up 
         const user = userCredential.user;
         console.log('user :>> ', user.email);
-        setLoading(true)
         // dispatch(isLogged(result.user.email!))
 
         navigate('/createprofile', { replace: true })
@@ -29,7 +29,7 @@ const Login = () => {
         console.log(err.code);
       }).finally(() => {
         setLoading(false)
-console.log(loading);
+        console.log(loading);
       })
 
   }
@@ -72,9 +72,9 @@ console.log(loading);
         </div>
 
       </article>
-    
+
     </section>
   );
 }
 
-export default Login;
+export default Register;

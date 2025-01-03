@@ -1,3 +1,4 @@
+import { ChangeEvent, useEffect, useState } from "react";
 
 
 import { MdAddPhotoAlternate } from "react-icons/md";
@@ -6,13 +7,25 @@ import Input from "../../components/Input";
 import Menu from "../../components/Menu";
 import ServicesOffers from './../../components/servicesOfers/index';
 import Footer from "../../components/footer";
-import { useEffect, useState } from "react";
 // funções DB
-import { indentitiAdd } from "./createProfile";
+import { appearanceAdd, indentitiAdd, messageAdd, servicesAdd } from "./createProfile";
+
+// redux
+import { useSelector } from "react-redux";
+import { useloginSlice } from "../../redux/loginSlice";
+import toast from './../../../node_modules/react-hot-toast/src/index';
+import { ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../../services";
 
 
 
-
+interface ImageProps {
+  uid: string;
+  name: string;
+  previewUrl: string;
+  url: string;
+}
+ 
 const CreateProfile = () => {
   const [name, setName] = useState<string>('');
   const [age, setAge] = useState<string>('');
@@ -24,6 +37,7 @@ const CreateProfile = () => {
   const [message, setMessage] = useState<string>('');
   const [eyes, setEyes] = useState<string>('');
   const [tamCabelo, setTamCabelo] = useState<string>('');
+  const [colorHair, setColorHair] = useState<string>('');
   const [etnia, setEtnia] = useState<string>('');
   const [silicone, setSilicone] = useState<string>('');
   const [tampe, setTampe] = useState<string>('');
@@ -32,18 +46,94 @@ const CreateProfile = () => {
   const [umaHora, setUmaHora] = useState<string>('');
   const [duasHoras, setDuasHoras] = useState<string>('');
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const islogged = useSelector(useloginSlice)
 
-  const addidentify = ({ name, age, peso, altura, gender, idioma, smoking })=> {
-    indentitiAdd()
+  const fn = () => {
+    return Math.random().toString(36).substr(2, 9)
+  }
+
+  const addidentify = (name: string, age: string, peso: string, altura: string, idioma: string, gender: string, smoking: string) => {
+    indentitiAdd({ name, age, peso, altura, idioma, gender, smoking }, islogged.userLogged).then((result) => {
+      console.log('result :>> ', result);
+      toast.success('Identificação salva com sucesso!')
+    }).catch((err) => {
+      console.log('err :>> ', err);
+      toast.error(err.message)
+    }).finally(() => {
+
+    })
+  }
+
+  const addMessage = (message: string) => {
+    messageAdd({ message }, islogged.userLogged).then((result) => {
+      console.log('result :>> ', result);
+      toast.success('Mensagem salva com sucesso!')
+    }).catch((err) => {
+      console.log('err :>> ', err);
+      toast.error(err.message)
+    }).finally(() => {
+      console.log('message :>> ', message);
+    })
+
+  }
+
+  const addAppearance = (eyes: string, tamCab: string, colorHair: string, etnia: string, silicone: string, tamPe: string, piercing: string) => {
+    appearanceAdd({ eyes, tamCab, colorHair, etnia, silicone, tamPe, piercing }, islogged.userLogged).then((result) => {
+      console.log('result :>> ', result);
+      toast.success('Aparência salva com sucesso!')
+    }).catch((err) => {
+      console.log('err :>> ', err);
+      toast.error(err.message)
+    }).finally(() => {
+      console.log('eyes :>> ', eyes);
+    })
   }
 
   const handlePreferenceChange = (service: string) => {
-
-    setSelectedServices((prev) => prev.includes(service) ? prev.filter((item) => item !== service) : [...prev, service]); 
-    
+    setSelectedServices((prev) => prev.includes(service) ? prev.filter((item) => item !== service) : [...prev, service]);
   };
 
-  // const handlePreferenceChange = (service: string) => { setSelectedServices((prev) => prev.includes(service) ? prev.filter((item) => item !== service) : [...prev, service]); };
+  const addServices = (services: string[])=> {
+    servicesAdd(services, islogged.userLogged).then((result) => {
+      console.log('result :>> ', result);
+      toast.success('Serviços salvos com sucesso!')
+    }
+    ).catch((err) => {
+      console.log('err :>> ', err);
+      toast.error(err.message)
+    }).finally(() => {
+      console.log('selectedServices :>> ', selectedServices);
+    })
+  }
+  const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const img = e.target.files[0]
+      if (img) {
+      //  console.log('img :>> ', img);
+        await handleUpload(img)
+      } else {
+        toast.error(' Selecione uma imagem válida')
+      }
+    } else {
+      return;
+    }
+  }
+  const handleUpload = async (image: File) => {
+    const userId = islogged?.userLogged
+    if (!islogged?.userLogged) {
+      return
+    }
+    const imgName = `${fn() }-${image.name}`
+    const uploadRef = ref(storage, `images/${userId}/${imgName}`)
+    const uploadTask = uploadBytesResumable(uploadRef,  image)
+    console.log('islogged.userLogged :>> ', islogged.userLogged);
+    console.log('img :>> ', image);
+  }
+
+
+  // const verifyLogin = ()=> {
+  //  console.log('islogged :>> ', islogged.userLogged);
+  // }
 
   const formatarMoeda = (valor: any) => {
     if (!valor) return ''
@@ -60,15 +150,14 @@ const CreateProfile = () => {
   }
   useEffect(() => {
     console.log(selectedServices);
-
-
-  }, [peso, altura, idioma, name, age, gender, smoking, message, eyes, tamCabelo, selectedServices]);
+    console.count('createProfile');
+  }, [selectedServices]);
 
   return (
     <>
 
       <Menu />
-      <section className="p-1 ">
+      <section className="p-1 pb-16">
         <article className="flex flex-col bg-gcor05 p-1 rounded relative ">
           <h1 className="font-gvibes text-5xl my-5 md:left-0 text-center text-white drop-shadow-md "> Garota, aqui é seu espaço mostre quem você quer que eles pensem que você é!</h1>
 
@@ -100,7 +189,7 @@ const CreateProfile = () => {
                 <Input placeholder=" Fumante?" onChange={(e) => { setSmoking(e.target.value) }} value={smoking} />
               </div>
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={()=>{addidentify()}}>Salvar Indentificação</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addidentify(name, age, peso, altura, idioma, gender, smoking) }}>Salvar Indentificação</button>
           </div>
 
           <div className=" flex flex-col items-center justify-center bg-white rounded-lg mb-5">
@@ -108,7 +197,9 @@ const CreateProfile = () => {
               <h1 className="font-ral italic bg-white absolute -top-3  left-0 rounded-lg  px-1">Deixe um recado pra atiçar a imaginação deles...</h1>
               <textarea className="border border-zinc-700 mt-8 md:mt-0 rounded-md w-4/5 outline-none shadow-lg placeholder:p-1" onChange={(e) => { setMessage(e.target.value); }} rows={5} cols={33} placeholder="Provoque e Prometa...." value={message} />
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg">Salvar Recado</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
+              addMessage(message)
+            }}>Salvar Recado</button>
           </div>
           <div className=" flex flex-col items-center justify-center bg-white rounded-lg mb-5">
             <div className="w-full md:flex  items-center relative ">
@@ -116,7 +207,7 @@ const CreateProfile = () => {
 
               <div className="flex flex-col h-32  mt-4 md:my-1 md:mt-8 justify-center items-center md:w-1/3">
                 <Input placeholder="Cor dos olhos" onChange={(e) => { setEyes(e.target.value) }} value={eyes} />
-                <Input placeholder=" Cor do cabelo" />
+                <Input placeholder=" Cor do cabelo" onChange={(e) => { setColorHair(e.target.value) }} value={colorHair} />
               </div>
               <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
                 <Input placeholder="Cumprimento do cabelo" onChange={(e) => { setTamCabelo(e.target.value) }} value={tamCabelo} />
@@ -129,13 +220,18 @@ const CreateProfile = () => {
               </div>
 
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg">Salvar Descrição</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
+              addAppearance(eyes, tamCabelo, colorHair, etnia, silicone, tampe, piercing)
+            }}>Salvar Descrição</button>
           </div>
           <div className="w-full md:flex  items-center relative bg-white  rounded-lg mb-5 ">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">O que você topa fazer, garota?</h1>
-
+            <div className="flex flex-col justify-center items-center">
             <ServicesOffers onPreferenceChange={handlePreferenceChange} />
-
+              <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
+                addServices(selectedServices)
+              }}>Salvar Serviços</button>
+              </div>
           </div>
 
           {/* <div className="w-full md:flex  items-center relative bg-white  rounded-lg mb-5 ">
@@ -148,8 +244,8 @@ const CreateProfile = () => {
           <div className="w-full flex flex-wrap items-center justify-center md:flex-col md:justify-around relative bg-white  rounded-lg mb-5 p-1">
             <h1 className="font-ral italic bg-white absolute -top-3  left-0 rounded-lg  px-1">Agora arrase! Escolha as suas melhores fotos, garota</h1>
             <div className="mt-8 flex justify-around items-center w-full mb-5">
-              <input id="file" type="file" className="hidden peer" aria-label="file" />
-              <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0">
+              <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile}/>
+              <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0 shadow-lg">
                 <MdAddPhotoAlternate size={48} />
               </label>
             </div>

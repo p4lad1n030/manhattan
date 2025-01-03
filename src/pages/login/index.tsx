@@ -4,13 +4,16 @@ import { FormEvent, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdArrowRoundBack, IoMdLock, IoMdMail } from "react-icons/io";
 import { SiLoop } from "react-icons/si";
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../services";
+import { isLogged } from "../../redux/loginSlice";
+import { useDispatch } from "react-redux";
+
 
 
 const Login = () => {
-  // 1318X642
-    const [userEmail, setUserEmail] = useState<string>('');
+  const dispatch = useDispatch()
+  const [userEmail, setUserEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
@@ -21,19 +24,26 @@ const Login = () => {
     e.preventDefault()
     setLoading(true)
     signInWithEmailAndPassword(auth, userEmail, passWord).then((result) => {
-      console.log('result :>> ', result.user.email);
+      console.log(result);
+      const userId = result.user.uid
+      console.log('result.providerId :>> ', result.providerId);
+
       const usergirl = result.user.email
       //abaixo redirecionar o login das garotas diretamente para o seu perfil
       if (usergirl) {
+        dispatch(isLogged(userId))
 
       }
-      
-      // dispatch(isLogged(result.user.email!))
-        navigate('/createprofile', { replace: true })
-     
+
+      navigate('/createprofile', { replace: true })
+
     }).catch((err) => {
       setLoading(false)
-      console.log(err.code);
+      const errorCode = err.code;
+      const errorMessage = err.message;
+      console.log('erro code ' + errorCode, 'erro message ' + errorMessage);
+      // The email of the user's account used.
+      
     }).finally(() => {
       setLoading(false)
 
@@ -44,23 +54,14 @@ const Login = () => {
     setLoadingGoogle(true)
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        if (credential?.accessToken) {
-          const token = credential.accessToken;
-          console.log(token);
-        }
-        // The signed-in user info.
-        const user = result.user;
-        console.log(user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        const userId = result.user.uid
+        dispatch(isLogged(userId))
         navigate('/createprofile', { replace: true })
       }).catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode , errorMessage);
+        console.log(errorCode, errorMessage);
         // The email of the user's account used.
         const email = error.customData.email;
         console.log(email);
@@ -74,11 +75,11 @@ const Login = () => {
 
       })
   }
-  
+
 
   return (
     <section className="h-screen flex flex-col p-2 video" >
-      
+
 
 
       <div className="bg-gcor p-2 w-12 h-12 flex justify-center items-center rounded-full   shadow-lg md:mt-6 md:ml-6 mb-2 md:mb-0">
@@ -92,7 +93,7 @@ const Login = () => {
 
         <form className="w-[100%] md:w-full p-2 h-3/4 flex flex-col justify-center items-center   rounded-3xl" onSubmit={handleSubmit}>
           <div className="relative w-full md:w-3/4 mb-12">
-            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="email" placeholder="Digite seu email..." onChange={(e)=>setUserEmail(e.target.value)} autoComplete="email"/>
+            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="email" placeholder="Digite seu email..." onChange={(e) => setUserEmail(e.target.value)} autoComplete="email" />
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdMail className="text-vviolet" size={24} />
             </span>
@@ -107,14 +108,14 @@ const Login = () => {
             <Link to={'/register'}><span className="font-semibold underline cursor-pointer"> Registre-se</span></Link></p>
 
           <button type="submit" className="bg-vviolet text-white p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet" aria-label="Acessar">
-            {loading ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : 'Acessar'}  
+            {loading ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : 'Acessar'}
           </button>
         </form>
         <div className="flex flex-col justify-center items-center my-2">
           <h3 className="font-ral text-xl font-semibold text-white">Ou acesse usando</h3>
-          
+
           <button type="button" className="flex justify-center items-center bg-vviolet text-white p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet" aria-label="Google" onClick={SigInG}>
-            {loadingGoogle ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : <><FcGoogle size={24} />oogle</> }   
+            {loadingGoogle ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : <><FcGoogle size={24} />oogle</>}
           </button>
         </div>
 

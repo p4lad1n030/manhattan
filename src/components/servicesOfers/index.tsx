@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { clsx } from 'clsx';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../services";
+import { useSelector } from "react-redux";
+import { useloginSlice } from "../../redux/loginSlice";
 
 interface ServicesOffersProps {
 
@@ -47,6 +51,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
   const [button30, setButton30] = useState<boolean>(false);
   const [button31, setButton31] = useState<boolean>(false);
   const [button32, setButton32] = useState<boolean>(false);
+  const islogged = useSelector(useloginSlice)
 
   const handlePreferenceChange = (event: { target: { name: string; checked: boolean; }; }) => { onPreferenceChange(event.target.name); };
 
@@ -98,12 +103,14 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
     // const l = []
     // l.push([servicesOffers])
     //  console.log(l);
+    (async () => {
+       const docRef = doc(db, "profiles", islogged.userLogged); const docSnap = await getDoc(docRef); if (docSnap.exists()) { const docData = docSnap.data(); const docString = JSON.stringify(docData); const docSize = new TextEncoder().encode(docString).length; console.log(`O tamanho do documento é: ${docSize} bytes`); } else { console.log("Nenhum documento encontrado!"); } })()
+   
 
-
-  }, []);
+  }, [button1 ]);
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    
       <div className="w-full mt-4 flex flex-wrap justify-around pt-7">
         <div className="flex md:w-4/12 flex-col p-2">
           <div className="flex items-center w-full   ">
@@ -571,6 +578,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+        
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -594,6 +602,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -617,6 +626,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -640,6 +650,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -664,6 +675,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -688,6 +700,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -712,6 +725,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -736,6 +750,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -759,6 +774,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -782,6 +798,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -806,6 +823,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -830,6 +848,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -853,6 +872,7 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           </p>
           <span className="w-full border-b-2 "></span>
         </div>
+
         <div className="flex md:w-4/12 flex-col p-2 ">
           <div className="flex items-center w-full ">
             <div className="w-5 h-5 ">
@@ -877,8 +897,8 @@ const ServicesOffers = ({ onPreferenceChange }: ServicesOffersProps) => {
           <span className="w-full border-b-2 "></span>
         </div>
       </div>
-      <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg">Salvar Serviços</button>
-    </div>
+      
+   
   );
 }
 

@@ -26,7 +26,7 @@ const Home = () => {
     <>
       <section className="">
         <Menu />
-        {/* <h1 className="text-center text-5xl font-ral my-4">Sinta a emoção do que esta por vir!</h1>
+        <h1 className="text-center text-5xl font-ral my-4">Sinta a emoção do que esta por vir!</h1>
         <article className="flex flex-col w-full items-center relative mb-2">
           <div className="relative w-52">
             <video className="w-full rounded-lg"
@@ -36,7 +36,7 @@ const Home = () => {
             </video>
             <button type="button" className="bg-gcor absolute top-3/4 md:top-[80%] left-3/4 md:left-[80%] w-[80px] md:w-32 h-14 rounded-lg flex justify-center items-center" aria-label="Volume" onClick={toggleMute}> {isMuted ? <FaVolumeMute size={34} color="#fff" /> : <AiFillSound size={34} color="#fff" />}</button>
           </div>
-        </article> */}
+        </article>
 
         <div className="w-full md:w-1/2 mx-auto mb-1">
           <Carousel
