@@ -1,5 +1,6 @@
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../services";
+import { ImageProps } from ".";
 
 
 
@@ -58,9 +59,9 @@ const indentitiAdd = async (identify: IndentificationProps, userUid: string): Pr
   }
 }
 export { indentitiAdd };
-  
-  
-  //message
+
+
+//message
 interface MessageProps {
   message: string;
 }
@@ -78,8 +79,8 @@ const messageAdd = async (message: MessageProps, userUid: string): Promise<void>
   }
 }
 export { messageAdd };
-  
-  
+
+
 // Appearance
 interface AppearanceProps {
   eyes: string;
@@ -110,7 +111,7 @@ const appearanceAdd = async (appearance: AppearanceProps, userUid: string): Prom
   }
 }
 export { appearanceAdd };
-  
+
 // Services
 
 const servicesAdd = async (services: string[], userUid: string): Promise<void> => {
@@ -128,7 +129,38 @@ const servicesAdd = async (services: string[], userUid: string): Promise<void> =
 }
 export { servicesAdd };
 
-// Prices
+// images
+const imagesAdd = async (img: ImageProps, userUid: string) => {
+  if (!img) {
+    return Promise.reject(new Error("Escolha ao menos uma imagem, garota!"));
+  }
+  
+  try {
+    const docRef = doc(db, "profiles", userUid);
+    await setDoc(docRef, {
+      img
+    }, { merge: true });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
 
+export { imagesAdd }
 
-
+// prices
+const pricesAdd = async(meia:string, uma:string,duas:string, userUid:string) => {
+  if (!meia && !uma && !duas ) {
+    return Promise.reject(new Error("Coloque ao menos um valor, garota!"));
+  }
+  try {
+    const docRef = doc(db, "profiles", userUid);
+    await setDoc(docRef, {
+      meiaHora: meia.replace(/\D/g, ''),
+      umaHora: uma.replace(/\D/g, ''),
+      duasHoras: duas.replace(/\D/g, '')
+    }, { merge: true });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+export {pricesAdd}

@@ -18,7 +18,7 @@ const Menu = () => {
         {/* largura acima de 768 */}
         <menu className={'hidden md:flex w-1/3'}>
           <div className="flex justify-between flex-wrap w-full">
-            <Link to='/Admin'>
+            <Link to='/admin'>
               <button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink  font-robotoc font-medium border-white border hover:border-vviolet" aria-label="Admin">Admin</button>
             </Link>
             <Link to='/register'><button type="button" className="bg-vviolet p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border" aria-label="Cadastro">Cadastro</button></Link>

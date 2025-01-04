@@ -7,24 +7,26 @@ import Input from "../../components/Input";
 import Menu from "../../components/Menu";
 import ServicesOffers from './../../components/servicesOfers/index';
 import Footer from "../../components/footer";
+import { TbTrashFilled } from "react-icons/tb"
 // funções DB
-import { appearanceAdd, indentitiAdd, messageAdd, servicesAdd } from "./createProfile";
+import { appearanceAdd, imagesAdd, indentitiAdd, messageAdd, pricesAdd, servicesAdd } from "./createProfile";
 
 // redux
 import { useSelector } from "react-redux";
 import { useloginSlice } from "../../redux/loginSlice";
 import toast from './../../../node_modules/react-hot-toast/src/index';
-import { ref, uploadBytesResumable } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../services";
 
 
 
-interface ImageProps {
+export interface ImageProps {
   uid: string;
   name: string;
   previewUrl: string;
   url: string;
 }
+
  
 const CreateProfile = () => {
   const [name, setName] = useState<string>('');
@@ -47,6 +49,9 @@ const CreateProfile = () => {
   const [duasHoras, setDuasHoras] = useState<string>('');
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const islogged = useSelector(useloginSlice)
+  const [upInfo, setUpInfo] = useState<number>();
+  const [img, setImg] = useState<ImageProps[]>([]);
+
 
   const fn = () => {
     return Math.random().toString(36).substr(2, 9)
@@ -60,7 +65,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-
+      setName(''), setAge(''), setPeso('')
     })
   }
 
@@ -94,6 +99,10 @@ const CreateProfile = () => {
   };
 
   const addServices = (services: string[])=> {
+    if (services.length < 1) {
+      toast.error('Escolha ao Menos Um Tipo de Serviço')
+      return
+    }
     servicesAdd(services, islogged.userLogged).then((result) => {
       console.log('result :>> ', result);
       toast.success('Serviços salvos com sucesso!')
@@ -121,20 +130,100 @@ const CreateProfile = () => {
   const handleUpload = async (image: File) => {
     const userId = islogged?.userLogged
     if (!islogged?.userLogged) {
+      toast.error('Faça Login Novamente, Erro Interno')
       return
     }
-    const imgName = `${fn() }-${image.name}`
+    
+    const imgName = `${fn() }${image.name}`
     const uploadRef = ref(storage, `images/${userId}/${imgName}`)
     const uploadTask = uploadBytesResumable(uploadRef,  image)
-    console.log('islogged.userLogged :>> ', islogged.userLogged);
-    console.log('img :>> ', image);
+    uploadTask.on('state_changed',
+      (snap) => {
+        const p = (snap.bytesTransferred / snap.totalBytes) * 100;
+        setUpInfo(p)
+        const playButton = document.getElementById('play');
+        if (playButton) {
+          playButton.onclick = function () {
+            uploadTask.resume();
+          };
+        }
+        const pauseButton = document.getElementById('pause');
+        if (pauseButton) {
+          pauseButton.onclick = function () {
+            uploadTask.pause();
+          };
+        }
+        const stopButton = document.getElementById('stop');
+        if (stopButton) {
+          stopButton.onclick = function () {
+            uploadTask.cancel();
+            toast.error("Cancelado pelo usuário")
+            setUpInfo(0)
+          };
+        }
+      },//then
+      (e) => {
+        console.log(e);
+      },//catch
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref)
+          .then((res) => {
+            const imageItem = {
+              name: imgName,
+              uid: islogged.userLogged,
+              previewUrl: URL.createObjectURL(image),
+              url: res
+            }
+            setImg((images) => [...images, imageItem])
+            setUpInfo(0)
+          }).catch((e) => {
+            console.log(e);
+          });
+      }//finally
+    )
+  }
+  const handleSaveImg = (image: ImageProps) => {
+    if (img.length < 6) {
+     if (img.length < 1) {
+       toast.error('Escolha ao Menos Uma Imagem!')
+       return
+      }
+      imagesAdd(image, islogged.userLogged).then((result) => {
+        console.log(result);
+        toast.success(img.length > 1 ? 'imagens salvas com suacesso' : 'imagem salva com suacesso')
+      }).catch((err) => {
+        toast.error(err)
+      });
+    } else {
+      toast.error('Só é Permitido 5 Imagens!')
+    }
+   
+  }
+  const handleSavePrice = (meia: string, uma: string, duas: string) => {
+    if (!meia && !uma && !duas) {
+      toast.error('Determine ao Menos Um Valor')
+      return
+    }
+   pricesAdd(meia, uma, duas, islogged.userLogged).then(() => {
+     toast.success(uma || meia || duas ? 'Preço Salvo Com Sucesso' : 'Preços Salvos Com Sucesso')
+   }).catch((err) => {
+     toast.error(err)
+    
+   });
+  }
+  const handleDeleteImage = async (i: ImageProps) => {
+    const imgPath = `images/${i.uid}/${i.name}`;
+    const imageRef = ref(storage, imgPath);
+    try {
+      await deleteObject(imageRef)
+      setImg(img.filter((img) => img.url !== i.url))
+    } catch (e) {
+      console.log(e);
+
+    }
   }
 
-
-  // const verifyLogin = ()=> {
-  //  console.log('islogged :>> ', islogged.userLogged);
-  // }
-
+  
   const formatarMoeda = (valor: any) => {
     if (!valor) return ''
     return new Intl.NumberFormat('pt-BR', {
@@ -149,8 +238,9 @@ const CreateProfile = () => {
     usestate(valor ? formatarMoeda(parseFloat(valor) / 100) : '') // Divide por 100 para considerar os centavos
   }
   useEffect(() => {
-    console.log(selectedServices);
     console.count('createProfile');
+    console.log(selectedServices);
+    console.log(img);
   }, [selectedServices]);
 
   return (
@@ -241,23 +331,38 @@ const CreateProfile = () => {
 
           </div> */}
 
-          <div className="w-full flex flex-wrap items-center justify-center md:flex-col md:justify-around relative bg-white  rounded-lg mb-5 p-1">
+          <div className="w-full flex flex-wrap items-center justify-center flex-col md:justify-around relative bg-white  rounded-lg mb-5 p-1">
             <h1 className="font-ral italic bg-white absolute -top-3  left-0 rounded-lg  px-1">Agora arrase! Escolha as suas melhores fotos, garota</h1>
-            <div className="mt-8 flex justify-around items-center w-full mb-5">
-              <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile}/>
-              <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0 shadow-lg">
-                <MdAddPhotoAlternate size={48} />
-              </label>
+            <div className="flex flex-col w-full">
+              <div className="mt-8 flex justify-around items-center w-full mb-5">
+                <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile}/>
+                <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0 shadow-lg">
+                  <MdAddPhotoAlternate size={48} />
+                </label>
+              </div>
+              { upInfo! > 0 &&
+                <div className="bg-gcor05 w-full h-2 mb-1 flex justify-center items-center rounded-lg p-2">
+                <div className={`bg-white w-[${upInfo}%] h-1 rounded-md`} > </div>
+              </div>}
             </div>
-            <div className="bg-gcor05 w-full  rounded-lg flex flex-wrap justify-center items-center p-2">
-              <img src="https://placehold.co/300x200?text=Sua+Foto+Aqui" alt="" className=" border-2 border-white rounded-xl m-1" />
-              <img src="https://placehold.co/300x200?text=Sua+Foto+Aqui" alt="" className=" border-2 border-white rounded-xl m-1" />
-              <img src="https://placehold.co/300x200?text=Sua+Foto+Aqui" alt="" className=" border-2 border-white rounded-xl m-1" />
-              <img src="https://placehold.co/300x200?text=Sua+Foto+Aqui" alt="" className=" border-2 border-white rounded-xl m-1" />
-              <img src="https://placehold.co/300x200?text=Sua+Foto+Aqui" alt="" className=" border-2 border-white rounded-xl m-1" />
-              <img src="https://placehold.co/300x200?text=Sua+Foto+Aqui" alt="" className=" border-2 border-white rounded-xl m-1" />
-            </div>
-
+            {img.length > 0 ?
+              <div className="bg-gcor05 w-full  rounded-lg flex flex-wrap justify-center items-center p-2">
+              
+              {img.map((i) => (
+                <div className="relative" key={i.name}>
+                  <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
+                    handleDeleteImage(i)
+                  }} aria-label="Deletar">
+                    <TbTrashFilled className="  hover:text-red-600 text-white border-2 rounded-lg bg-red-600 hover:bg-white hover:border-red-600" size={48}/>
+                  </button>
+                  <img  src={i.previewUrl} alt="img-garota" className="object-cover border-2 border-white rounded-xl m-1 w-[400px] h-[400px]" />
+                </div> 
+              ))}
+              
+            </div> : ''}
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mt-2 shadow-lg" onClick={() => {
+              handleSaveImg(img as unknown as ImageProps)
+            }}>Salvar Imagens</button>
           </div>
 
           <div className=" flex flex-col items-center justify-center bg-white rounded-lg mb-5">
@@ -269,7 +374,9 @@ const CreateProfile = () => {
                 <Input placeholder="2 hora" onChange={(e) => { numberFormat(e.target.value, setDuasHoras) }} value={duasHoras} />
               </div>
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg">Salvar Preços</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
+              handleSavePrice(meiaHora,umaHora,duasHoras)
+            }}>Salvar Preços</button>
           </div>
           <div className="w-full md:flex justify-center  items-center relative bg-white  rounded-lg mb-5 ">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">Financeiro</h1>
@@ -312,3 +419,5 @@ const CreateProfile = () => {
 }
 
 export default CreateProfile;
+
+
