@@ -24,19 +24,13 @@ const Login = () => {
     e.preventDefault()
     setLoading(true)
     signInWithEmailAndPassword(auth, userEmail, passWord).then((result) => {
-      console.log(result);
       const userId = result.user.uid
-      console.log('result.providerId :>> ', result.providerId);
-
       const usergirl = result.user.email
       //abaixo redirecionar o login das garotas diretamente para o seu perfil
       if (usergirl) {
         dispatch(isLogged(userId))
-
       }
-
       navigate('/createprofile', { replace: true })
-
     }).catch((err) => {
       setLoading(false)
       const errorCode = err.code;

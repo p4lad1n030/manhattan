@@ -17,6 +17,7 @@ import { useloginSlice } from "../../redux/loginSlice";
 import toast from './../../../node_modules/react-hot-toast/src/index';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../services";
+import clsx from "clsx";
 
 
 
@@ -27,7 +28,7 @@ export interface ImageProps {
   url: string;
 }
 
- 
+
 const CreateProfile = () => {
   const [name, setName] = useState<string>('');
   const [age, setAge] = useState<string>('');
@@ -65,7 +66,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-      setName(''), setAge(''), setPeso('')
+      setName(''), setAge(''), setPeso(''), setAltura(''), setIdioma(''), setGender(''),setSmoking('')
     })
   }
 
@@ -77,7 +78,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-      console.log('message :>> ', message);
+      setMessage('')
     })
 
   }
@@ -90,7 +91,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-      console.log('eyes :>> ', eyes);
+      setEyes(''),setColorHair(''),setTamCabelo(''),setEtnia(''),setSilicone(''),setTampe(''),setPiercing('')
     })
   }
 
@@ -98,7 +99,7 @@ const CreateProfile = () => {
     setSelectedServices((prev) => prev.includes(service) ? prev.filter((item) => item !== service) : [...prev, service]);
   };
 
-  const addServices = (services: string[])=> {
+  const addServices = (services: string[]) => {
     if (services.length < 1) {
       toast.error('Escolha ao Menos Um Tipo de Serviço')
       return
@@ -111,6 +112,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
+      setSelectedServices([])
       console.log('selectedServices :>> ', selectedServices);
     })
   }
@@ -118,7 +120,7 @@ const CreateProfile = () => {
     if (e.target.files && e.target.files[0]) {
       const img = e.target.files[0]
       if (img) {
-      //  console.log('img :>> ', img);
+        //  console.log('img :>> ', img);
         await handleUpload(img)
       } else {
         toast.error(' Selecione uma imagem válida')
@@ -133,10 +135,10 @@ const CreateProfile = () => {
       toast.error('Faça Login Novamente, Erro Interno')
       return
     }
-    
-    const imgName = `${fn() }${image.name}`
+
+    const imgName = `${fn()}${image.name}`
     const uploadRef = ref(storage, `images/${userId}/${imgName}`)
-    const uploadTask = uploadBytesResumable(uploadRef,  image)
+    const uploadTask = uploadBytesResumable(uploadRef, image)
     uploadTask.on('state_changed',
       (snap) => {
         const p = (snap.bytesTransferred / snap.totalBytes) * 100;
@@ -184,9 +186,9 @@ const CreateProfile = () => {
   }
   const handleSaveImg = (image: ImageProps) => {
     if (img.length < 6) {
-     if (img.length < 1) {
-       toast.error('Escolha ao Menos Uma Imagem!')
-       return
+      if (img.length < 1) {
+        toast.error('Escolha ao Menos Uma Imagem!')
+        return
       }
       imagesAdd(image, islogged.userLogged).then((result) => {
         console.log(result);
@@ -197,19 +199,21 @@ const CreateProfile = () => {
     } else {
       toast.error('Só é Permitido 5 Imagens!')
     }
-   
+
   }
   const handleSavePrice = (meia: string, uma: string, duas: string) => {
     if (!meia && !uma && !duas) {
       toast.error('Determine ao Menos Um Valor')
       return
     }
-   pricesAdd(meia, uma, duas, islogged.userLogged).then(() => {
-     toast.success(uma || meia || duas ? 'Preço Salvo Com Sucesso' : 'Preços Salvos Com Sucesso')
-   }).catch((err) => {
-     toast.error(err)
-    
-   });
+    pricesAdd(meia, uma, duas, islogged.userLogged).then(() => {
+      toast.success(uma || meia || duas ? 'Preço Salvo Com Sucesso' : 'Preços Salvos Com Sucesso')
+    }).catch((err) => {
+      toast.error(err)
+
+    }).finally(() => {
+      setMeiaHora(''),setUmaHora(''),setDuasHoras('')
+    })
   }
   const handleDeleteImage = async (i: ImageProps) => {
     const imgPath = `images/${i.uid}/${i.name}`;
@@ -223,7 +227,7 @@ const CreateProfile = () => {
     }
   }
 
-  
+
   const formatarMoeda = (valor: any) => {
     if (!valor) return ''
     return new Intl.NumberFormat('pt-BR', {
@@ -239,15 +243,27 @@ const CreateProfile = () => {
   }
   useEffect(() => {
     console.count('createProfile');
-    console.log(selectedServices);
-    console.log(img);
+   
+    return () => {
+      
+    };
   }, [selectedServices]);
+
 
   return (
     <>
 
       <Menu />
-      <section className="p-1 pb-16">
+      {/* {${upInfo} } */}
+      <section className="p-1 pb-16 relative">
+        {
+          upInfo! > 0 &&
+          
+          <div className="w-full">
+            <div className={` transition-all duration-[1500ms] ease-in-out bg-gcor  h-1 mb-1 flex justify-center items-center rounded-lg p-2 fixed -top-[10px] z-50`} style={{ width: `${upInfo}%` }}>
+            </div>
+          </div>}
+       
         <article className="flex flex-col bg-gcor05 p-1 rounded relative ">
           <h1 className="font-gvibes text-5xl my-5 md:left-0 text-center text-white drop-shadow-md "> Garota, aqui é seu espaço mostre quem você quer que eles pensem que você é!</h1>
 
@@ -317,11 +333,11 @@ const CreateProfile = () => {
           <div className="w-full md:flex  items-center relative bg-white  rounded-lg mb-5 ">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">O que você topa fazer, garota?</h1>
             <div className="flex flex-col justify-center items-center">
-            <ServicesOffers onPreferenceChange={handlePreferenceChange} />
+              <ServicesOffers onPreferenceChange={handlePreferenceChange} />
               <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
                 addServices(selectedServices)
               }}>Salvar Serviços</button>
-              </div>
+            </div>
           </div>
 
           {/* <div className="w-full md:flex  items-center relative bg-white  rounded-lg mb-5 ">
@@ -333,33 +349,30 @@ const CreateProfile = () => {
 
           <div className="w-full flex flex-wrap items-center justify-center flex-col md:justify-around relative bg-white  rounded-lg mb-5 p-1">
             <h1 className="font-ral italic bg-white absolute -top-3  left-0 rounded-lg  px-1">Agora arrase! Escolha as suas melhores fotos, garota</h1>
-            <div className="flex flex-col w-full">
+            
               <div className="mt-8 flex justify-around items-center w-full mb-5">
-                <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile}/>
+                <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile} />
                 <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0 shadow-lg">
                   <MdAddPhotoAlternate size={48} />
                 </label>
               </div>
-              { upInfo! > 0 &&
-                <div className="bg-gcor05 w-full h-2 mb-1 flex justify-center items-center rounded-lg p-2">
-                <div className={`bg-white w-[${upInfo}%] h-1 rounded-md`} > </div>
-              </div>}
-            </div>
+             
+            
             {img.length > 0 ?
               <div className="bg-gcor05 w-full  rounded-lg flex flex-wrap justify-center items-center p-2">
-              
-              {img.map((i) => (
-                <div className="relative" key={i.name}>
-                  <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
-                    handleDeleteImage(i)
-                  }} aria-label="Deletar">
-                    <TbTrashFilled className="  hover:text-red-600 text-white border-2 rounded-lg bg-red-600 hover:bg-white hover:border-red-600" size={48}/>
-                  </button>
-                  <img  src={i.previewUrl} alt="img-garota" className="object-cover border-2 border-white rounded-xl m-1 w-[400px] h-[400px]" />
-                </div> 
-              ))}
-              
-            </div> : ''}
+
+                {img.map((i) => (
+                  <div className="relative" key={i.name}>
+                    <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
+                      handleDeleteImage(i)
+                    }} aria-label="Deletar">
+                      <TbTrashFilled className="  hover:text-red-600 text-white border-2 rounded-lg bg-red-600 hover:bg-white hover:border-red-600" size={48} />
+                    </button>
+                    <img src={i.previewUrl} alt="img-garota" className="object-cover border-2 border-white rounded-xl m-1 w-[400px] h-[400px]" />
+                  </div>
+                ))}
+
+              </div> : ''}
             <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mt-2 shadow-lg" onClick={() => {
               handleSaveImg(img as unknown as ImageProps)
             }}>Salvar Imagens</button>
@@ -375,7 +388,7 @@ const CreateProfile = () => {
               </div>
             </div>
             <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
-              handleSavePrice(meiaHora,umaHora,duasHoras)
+              handleSavePrice(meiaHora, umaHora, duasHoras)
             }}>Salvar Preços</button>
           </div>
           <div className="w-full md:flex justify-center  items-center relative bg-white  rounded-lg mb-5 ">
