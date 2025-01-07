@@ -5,7 +5,7 @@ import { IoMdArrowRoundBack, IoMdLock, IoMdMail } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../services";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
+import toast from './../../../node_modules/react-hot-toast/src/index';
 
 const Register = () => {
   // 1318X642
@@ -26,7 +26,17 @@ const Register = () => {
         navigate('/createprofile', { replace: true })
       }).catch((err) => {
         setLoading(false)
-        console.log(err.code);
+         const errorCode = err.code;
+              const errorMessage = err.message;
+              switch (errorCode) {
+                case 'auth/weak-password' : toast.error('Senha Fraca Utilize ao menos 6 caracteres')
+                  break
+                case 'auth/email-already-in-use' : toast.error('Usuário já Cadastrado')
+                  break
+                
+              }
+              console.log('erro code ' + errorCode, '\nerro message ' + errorMessage);
+              // The email of the user's account used.
       }).finally(() => {
         setLoading(false)
         console.log(loading);
@@ -48,13 +58,13 @@ const Register = () => {
 
         <form className="w-[100%] md:w-full p-2 h-3/4 flex flex-col justify-center items-center   rounded-3xl" onSubmit={handleSubmit}>
           <div className="relative w-full md:w-3/4 mb-12">
-            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="email" placeholder="Digite seu email..." onChange={(e) => setUserEmail(e.target.value)} />
+            <input type="text" className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="email" placeholder="Digite seu email..." onChange={(e) => setUserEmail(e.target.value)} autoComplete="email"  required/>
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdMail className="text-vviolet" size={24} />
             </span>
           </div>
           <div className="relative w-full md:w-3/4">
-            <input type="password" id='pass' className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="password" placeholder="Digite sua senha..." onChange={(e) => setPassWord(e.target.value)} />
+            <input type="password" id='pass' className="w-full rounded-lg h-10 pl-10 font-robotoc placeholder:font-robotoc shadow-lg outline-none" aria-label="password" placeholder="Digite sua senha..." onChange={(e) => setPassWord(e.target.value)} autoComplete="current-password" required/>
             <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
               <IoMdLock className="text-vviolet" size={24} />
             </span>

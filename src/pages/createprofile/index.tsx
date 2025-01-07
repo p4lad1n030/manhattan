@@ -13,11 +13,13 @@ import { appearanceAdd, imagesAdd, indentitiAdd, messageAdd, pricesAdd, services
 
 // redux
 import { useSelector } from "react-redux";
-import { useloginSlice } from "../../redux/loginSlice";
+import { isLogged, useloginSlice } from "../../redux/loginSlice";
 import toast from './../../../node_modules/react-hot-toast/src/index';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../services";
-import clsx from "clsx";
+import { auth, storage } from "../../services";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 
 
@@ -52,6 +54,8 @@ const CreateProfile = () => {
   const islogged = useSelector(useloginSlice)
   const [upInfo, setUpInfo] = useState<number>();
   const [img, setImg] = useState<ImageProps[]>([]);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
 
   const fn = () => {
@@ -66,7 +70,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-      setName(''), setAge(''), setPeso(''), setAltura(''), setIdioma(''), setGender(''),setSmoking('')
+      setName(''), setAge(''), setPeso(''), setAltura(''), setIdioma(''), setGender(''), setSmoking('')
     })
   }
 
@@ -91,7 +95,7 @@ const CreateProfile = () => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-      setEyes(''),setColorHair(''),setTamCabelo(''),setEtnia(''),setSilicone(''),setTampe(''),setPiercing('')
+      setEyes(''), setColorHair(''), setTamCabelo(''), setEtnia(''), setSilicone(''), setTampe(''), setPiercing('')
     })
   }
 
@@ -133,6 +137,13 @@ const CreateProfile = () => {
     const userId = islogged?.userLogged
     if (!islogged?.userLogged) {
       toast.error('Faça Login Novamente, Erro Interno')
+      signOut(auth).then(() => {
+        // Sign-out successful.
+        setTimeout(function () {
+          // body
+          navigate('/', { replace: true })
+        }, 700);
+      })
       return
     }
 
@@ -190,8 +201,7 @@ const CreateProfile = () => {
         toast.error('Escolha ao Menos Uma Imagem!')
         return
       }
-      imagesAdd(image, islogged.userLogged).then((result) => {
-        console.log(result);
+      imagesAdd(image, islogged.userLogged).then(() => {
         toast.success(img.length > 1 ? 'imagens salvas com suacesso' : 'imagem salva com suacesso')
       }).catch((err) => {
         toast.error(err)
@@ -202,17 +212,21 @@ const CreateProfile = () => {
 
   }
   const handleSavePrice = (meia: string, uma: string, duas: string) => {
-    if (!meia && !uma && !duas) {
-      toast.error('Determine ao Menos Um Valor')
+    if (!meia || !uma || !duas) {
+      toast.error('Preencha todos os valores')
       return
     }
-    pricesAdd(meia, uma, duas, islogged.userLogged).then(() => {
+    pricesAdd({ meia, uma, duas }, islogged.userLogged).then(() => {
+      if (!meia || !uma || !duas) {
+        toast.error('Preencha todos os valores')
+        return
+      }
       toast.success(uma || meia || duas ? 'Preço Salvo Com Sucesso' : 'Preços Salvos Com Sucesso')
     }).catch((err) => {
       toast.error(err)
 
     }).finally(() => {
-      setMeiaHora(''),setUmaHora(''),setDuasHoras('')
+      setMeiaHora(''), setUmaHora(''), setDuasHoras('')
     })
   }
   const handleDeleteImage = async (i: ImageProps) => {
@@ -226,15 +240,12 @@ const CreateProfile = () => {
 
     }
   }
-
-
   const formatarMoeda = (valor: any) => {
     if (!valor) return ''
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
       minimumFractionDigits: 2,
-
     }).format(valor)
   }
   const numberFormat = (e: string, usestate: React.Dispatch<React.SetStateAction<string>>) => {
@@ -242,28 +253,38 @@ const CreateProfile = () => {
     usestate(valor ? formatarMoeda(parseFloat(valor) / 100) : '') // Divide por 100 para considerar os centavos
   }
   useEffect(() => {
-    console.count('createProfile');
-   
+    const unsub = onAuthStateChanged(auth, (user) => {
+      console.count('unsub');
+      if (user) {
+        const uid = user.uid;
+        dispatch(isLogged(uid))
+      } else {
+        navigate('/', { replace: true })
+      }
+    })
     return () => {
-      
+      unsub()
     };
-  }, [selectedServices]);
+  }, []);
 
+  useEffect(() => {
+    console.count('selectedservices');
+  }, [selectedServices]);
 
   return (
     <>
 
       <Menu />
-      {/* {${upInfo} } */}
+
       <section className="p-1 pb-16 relative">
         {
           upInfo! > 0 &&
-          
+
           <div className="w-full">
             <div className={` transition-all duration-[1500ms] ease-in-out bg-gcor  h-1 mb-1 flex justify-center items-center rounded-lg p-2 fixed -top-[10px] z-50`} style={{ width: `${upInfo}%` }}>
             </div>
           </div>}
-       
+
         <article className="flex flex-col bg-gcor05 p-1 rounded relative ">
           <h1 className="font-gvibes text-5xl my-5 md:left-0 text-center text-white drop-shadow-md "> Garota, aqui é seu espaço mostre quem você quer que eles pensem que você é!</h1>
 
@@ -301,7 +322,7 @@ const CreateProfile = () => {
           <div className=" flex flex-col items-center justify-center bg-white rounded-lg mb-5">
             <div className="w-full flex flex-col justify-center items-center relative h-44 ">
               <h1 className="font-ral italic bg-white absolute -top-3  left-0 rounded-lg  px-1">Deixe um recado pra atiçar a imaginação deles...</h1>
-              <textarea className="border border-zinc-700 mt-8 md:mt-0 rounded-md w-4/5 outline-none shadow-lg placeholder:p-1" onChange={(e) => { setMessage(e.target.value); }} rows={5} cols={33} placeholder="Provoque e Prometa...." value={message} />
+              <textarea className="border border-zinc-700 mt-8 md:mt-0 rounded-md w-4/5 outline-none shadow-lg p-1 placeholder:p-1" onChange={(e) => { setMessage(e.target.value); }} rows={5} cols={33} placeholder="Provoque e Prometa...." value={message} />
             </div>
             <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
               addMessage(message)
@@ -349,15 +370,15 @@ const CreateProfile = () => {
 
           <div className="w-full flex flex-wrap items-center justify-center flex-col md:justify-around relative bg-white  rounded-lg mb-5 p-1">
             <h1 className="font-ral italic bg-white absolute -top-3  left-0 rounded-lg  px-1">Agora arrase! Escolha as suas melhores fotos, garota</h1>
-            
-              <div className="mt-8 flex justify-around items-center w-full mb-5">
-                <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile} />
-                <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0 shadow-lg">
-                  <MdAddPhotoAlternate size={48} />
-                </label>
-              </div>
-             
-            
+
+            <div className="mt-8 flex justify-around items-center w-full mb-5">
+              <input id="file" type="file" className="hidden peer" aria-label="file" onChange={handleFile} />
+              <label htmlFor="file" className="peer cursor-pointer flex justify-center items-center bg-gcor text-white rounded-lg p-2 mt-5 md:mt-0 shadow-lg">
+                <MdAddPhotoAlternate size={48} />
+              </label>
+            </div>
+
+
             {img.length > 0 ?
               <div className="bg-gcor05 w-full  rounded-lg flex flex-wrap justify-center items-center p-2">
 
@@ -434,3 +455,18 @@ const CreateProfile = () => {
 export default CreateProfile;
 
 
+/* 
+boa tarde, sua proposta é interessante. Porém esta desalinhada com o orçamento, eu cobrei 2000 do cliente pra desenvolver o sistema e entregar rodando na máquina do cliente e eu tenho a disposição no máximo 15%(300 reais) do valor do projeto pra contratação do ui/ux, acima disso eu mesmo desenho o layout e desenvolvo o projeto. Longe de mim colocar preço no teu trabalho acho que você merece ganhar muito bem, só estou chamando pra realidade.
+
+eu ainda não tenho ao certo o número de páginas e todos os detalhes do projeto porque vou me reunir hoje a noite com o cliente pra certar todos os detalhes, mas de qualquer forma se a tua proposta se alinhar com o orçamento do cliente podemos conversar sobre aguardo teu retorno
+
+
+
+      obrigado por seu interesse no projeto lembrando que estou contratando SOMENTE PARA O DESIGN, mas infelizmente a sua proposta está desalinhada com o orçamento do meu cliente
+
+      boa tarde, sua proposta é interessante. Porém esta desalinhada com o orçamento, eu cobrei 2000 do cliente pra desenvolver o sistema e entregar rodando na máquina do cliente e eu tenho a disposição no máximo 15%(300 reais) do valor do projeto pra contratação do ui/ux, acima disso eu mesmo desenho o layout e desenvolvo o projeto. Longe de mim colocar preço no teu trabalho acho que você merece ganhar muito bem, só estou chamando pra realidade.
+
+      outra questão é o teu prazo, eu não sou designer, mas tenho cursos na área e eu levo 5 dias pra desenvolver o layout da aplicação no figma, mas de verdade eu detesto fazer layout pra mim essa parte do design das aplicações é um parto
+
+      https://www.figma.com/design/XzNI9NkzTTfPwq6IugBXSY/Manhattan?node-id=0-1&t=Q0nC7dCdpGyd0lEw-1
+      {${upInfo} } */

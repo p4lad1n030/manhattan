@@ -14,28 +14,28 @@ import CreateProfile from "../pages/createprofile";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/createprofile",
+    element: <CreateProfile />,
   },
   {
     path: "/login",
     element: <Login />,
   },
   {
-    path: "/admin",
-    element: <Admin />,
+    path: "/",
+    element: <Home />,
   },
   {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/profile",
+    path: "/profile/:id",
     element: <Profile />,
   },
   {
-    path: "/createprofile",
-    element: <CreateProfile />,
+    path: "/admin/:id",
+    element: <Admin />,
   },
 
 ]);

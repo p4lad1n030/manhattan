@@ -6,13 +6,10 @@ import { IoMdArrowRoundBack, IoMdLock, IoMdMail } from "react-icons/io";
 import { SiLoop } from "react-icons/si";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../services";
-import { isLogged } from "../../redux/loginSlice";
-import { useDispatch } from "react-redux";
-
-
+import toast from './../../../node_modules/react-hot-toast/src/index';
 
 const Login = () => {
-  const dispatch = useDispatch()
+  
   const [userEmail, setUserEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,19 +20,20 @@ const Login = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    signInWithEmailAndPassword(auth, userEmail, passWord).then((result) => {
-      const userId = result.user.uid
-      const usergirl = result.user.email
-      //abaixo redirecionar o login das garotas diretamente para o seu perfil
-      if (usergirl) {
-        dispatch(isLogged(userId))
-      }
+    signInWithEmailAndPassword(auth, userEmail, passWord).then(() => {      
       navigate('/createprofile', { replace: true })
     }).catch((err) => {
       setLoading(false)
       const errorCode = err.code;
       const errorMessage = err.message;
-      console.log('erro code ' + errorCode, 'erro message ' + errorMessage);
+      switch (errorCode) {
+        case 'auth/invalid-credential' : toast.error('Senha Invalida')
+          break
+        case 'auth/invalid-email' : toast.error('Email Invalido')
+          break
+        
+      }
+      console.log('erro code ' + errorCode, '\nerro message ' + errorMessage);
       // The email of the user's account used.
       
     }).finally(() => {
@@ -47,22 +45,18 @@ const Login = () => {
   const SigInG = () => {
     setLoadingGoogle(true)
     signInWithPopup(auth, provider)
-      .then((result) => {
-        const userId = result.user.uid
-        dispatch(isLogged(userId))
+      .then(() => {        
         navigate('/createprofile', { replace: true })
       }).catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
+        
         console.log(errorCode, errorMessage);
         // The email of the user's account used.
         const email = error.customData.email;
         console.log(email);
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(credential);
-        // ...
+        
         setLoadingGoogle(false)
       }).finally(() => {
         setLoadingGoogle(false)

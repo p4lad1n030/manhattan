@@ -1,6 +1,7 @@
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../services";
 import { ImageProps } from ".";
+// import { isLogged } from "../../redux/loginSlice";
 
 
 
@@ -26,7 +27,7 @@ import { ImageProps } from ".";
 // }
 
 // identificação
-interface IndentificationProps {
+export interface IndentificationProps {
   docId?: string;
   name: string;
   age: string;
@@ -45,7 +46,7 @@ const indentitiAdd = async (identify: IndentificationProps, userUid: string): Pr
     console.count('func => indentitiAdd - line 39 (57)?');
     const docRef = doc(db, "profiles", userUid);
     await setDoc(docRef, {
-      docId: '',
+      docId: userUid,
       name: identify.name,
       age: identify.age,
       peso: identify.peso.replace(/\D/g, ''),
@@ -62,7 +63,7 @@ export { indentitiAdd };
 
 
 //message
-interface MessageProps {
+export interface MessageProps {
   message: string;
 }
 const messageAdd = async (message: MessageProps, userUid: string): Promise<void> => {
@@ -82,7 +83,7 @@ export { messageAdd };
 
 
 // Appearance
-interface AppearanceProps {
+ export interface AppearanceProps {
   eyes: string;
   colorHair: string;
   tamCab: string;
@@ -131,7 +132,7 @@ export { servicesAdd };
 
 // images
 const imagesAdd = async (img: ImageProps, userUid: string) => {
-  if (!img) {
+  if (!img ) {
     return Promise.reject(new Error("Escolha ao menos uma imagem, garota!"));
   }
   
@@ -148,16 +149,21 @@ const imagesAdd = async (img: ImageProps, userUid: string) => {
 export { imagesAdd }
 
 // prices
-const pricesAdd = async(meia:string, uma:string,duas:string, userUid:string) => {
-  if (!meia && !uma && !duas ) {
-    return Promise.reject(new Error("Coloque ao menos um valor, garota!"));
+export interface PricesProps {
+  meia: string
+  uma: string
+  duas:string
+}
+const pricesAdd = async(prices:PricesProps, userUid:string) => {
+  if (!prices.meia && !prices.uma && !prices.duas ) {
+    return Promise.reject(new Error("Preencha todos os valores, garota!"));
   }
   try {
     const docRef = doc(db, "profiles", userUid);
     await setDoc(docRef, {
-      meiaHora: meia.replace(/\D/g, ''),
-      umaHora: uma.replace(/\D/g, ''),
-      duasHoras: duas.replace(/\D/g, '')
+      meiaHora: prices.meia.replace(/\D/g, ''),
+      umaHora: prices.uma.replace(/\D/g, ''),
+      duasHoras: prices.duas.replace(/\D/g, '')
     }, { merge: true });
   } catch (error) {
     return Promise.reject(error);
