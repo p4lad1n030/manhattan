@@ -53,23 +53,27 @@ const Profile = () => {
       console.error("Erro ao buscar dados:", error);
     }
   }
+
   const dontOffers = () => {
     let alServices = ['Sexo Vaginal com Preservativo', 'sexo Oral', 'Sexo Anal com Preservativo', 'Beijo Grego', 'Beijo na Boca', 'Masturbação', 'Sexo Oral sem Preservativo', 'Sexo Virtual', 'Penetração com Acessórios Sexuais', 'Utiliza Acessórios Eróticos', 'Podolatria', 'Striptease', 'Massagem Tradicional', 'Massagem Tântrica', 'Dupla Penetração', 'Tripla Penetração', 'Dominação', 'Usa Fantasias ou Uniformes', 'Faz Role Play', 'Permite Filmagens', 'Sexo com voyeurismo/ser voyeur', 'Bondage', 'Sadomasoquismo', 'Fisting', 'FaceFuck', 'Quirofilia', 'Squirt', 'Chuva Dourada', 'Chuva Marrom', 'Trampling', 'Acompanhante', 'Viagem']
 
-    const dontOfferServices = alServices.filter(s => !user?.services.includes(s))
-    // const dontOfferServices = alServices.filter( s => user?.services.includes(s))
-    setNoOffers(dontOfferServices)
+    if (user?.services != undefined) {
+      const job = user?.services.map(s=>s) || []
+      const dontOfferServices = alServices.filter(sv => !job.includes(sv))
+      setNoOffers(dontOfferServices)
+    }
   }
+
   useEffect(() => {
     handleData();
-    console.log('noOffers :>> ', noOffers);
     dontOffers()
-  }, [id]);
+  
+  }, [user]);
 
   return (
     <article className="p-1">
       <Menu />
-      <div className="flex md:flex-row flex-col p-1 md:gap-1">
+      <div className="flex md:flex-row flex-col p-1 md:gap-1 rounded-lg">
         <div className=" p-1 md:w-1/3 bg-gcor05 flex flex-col items-center rounded-lg">
           <img src={user?.img[0].url} alt={user?.img[0].name} className="h-52 w-52 rounded-lg border-2" />
           <h1 className="text-3xl font-ral font-bold text-white drop-shadow-md">{user?.name}</h1>
@@ -122,13 +126,14 @@ const Profile = () => {
           </div>
 
         </div>
-        <div className={`w-full md:w-2/3 flex flex-col gap-1 p-1`}>
 
-          <div className="bg-gcor05 w-full rounded-lg">
+        <div className={`w-full md:w-2/3 flex flex-col gap-1 p-1 rounded-lg`}>
+
+          <div className="bg-gcor05 w-full ">
             <h1 className="text-white text-2xl font-ral font-bold text-center">O que ela topa fazer com você</h1>
             <div className="flex flex-col gap-4 md:grid md:grid-cols-2 p-1">
               {user?.services ?
-                user?.services.map((s, i) => (
+                user?.services.sort().map((s, i) => (
                   <div className="border-b-2 border-r-2 border-l-2 rounded-lg shadow-md" key={i}>
                     <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">{s}</p>
                   </div>
@@ -136,10 +141,10 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="bg-gcor05  w-full">
-              <h1 className="text-white text-2xl font-ral font-bold text-center">O que ela não topa fazer com você</h1>
+           <div className="bg-gcor05  w-full">
+            <h1 className="text-white text-2xl font-ral font-bold text-center">O que ela não topa fazer com você</h1>
             <div className="flex flex-col gap-4 md:grid md:grid-cols-2 p-1">
-              {noOffers.map((s, i) => (
+              {noOffers.sort().map((s, i) => (
                 <div className="border-b-2 border-r-2 border-l-2 rounded-lg shadow-md" key={i}>
                   <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">{s}</p>
                 </div>
@@ -151,12 +156,12 @@ const Profile = () => {
         </div>
 
       </div>
-      <h2 className="text-center font-ral font-bold drop-shadow-md text-4xl">Que tal dar uma espiada no que espera por você...</h2>
-      <div className="bg-gcor05 flex flex-wrap items-center justify-around p-4 gap-3 rounded-lg">
+      <h2 className="text-center font-ral font-bold drop-shadow-md text-4xl" >Que tal dar uma espiada no que espera por você...</h2>
+      <div className="bg-gcor05 flex flex-wrap items-center justify-center p-4 gap-3 rounded-lg">
         {user?.img.map((img, index) => (
           <div className="" key={index}>
             <img key={index} src={img.url} alt
-              ={img.name} className="rounded-md h-52 w-52" />
+              ={img.name} className="rounded-md h-80 w-52 border-white border-2" />
           </div>
         ))}
       </div>

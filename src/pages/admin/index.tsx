@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Menu from "../../components/Menu";
+import Footer from "../../components/footer";
 
 
 const Admin = () => {
@@ -8,6 +9,8 @@ const Admin = () => {
       <Menu />
       <h1 className="">Admin</h1>
       <Link to='/'>Home</Link>
+
+      <Footer />
     </div>
   );
 }

@@ -31,6 +31,7 @@ export interface IndentificationProps {
   docId?: string;
   name: string;
   age: string;
+  phone: string;
   peso: string;
   altura: string;
   idioma: string;
@@ -39,7 +40,7 @@ export interface IndentificationProps {
 }
 const indentitiAdd = async (identify: IndentificationProps, userUid: string): Promise<void> => {
 
-  if (!identify.name || !identify.age || !identify.peso || !identify.altura || !identify.idioma || !identify.gender || !identify.smoking) {
+  if (!identify.name || !identify.age || !identify.phone || !identify.peso || !identify.altura || !identify.idioma || !identify.gender || !identify.smoking) {
     return Promise.reject(new Error("Preencha todos os campos"));
   }
   try {
@@ -49,6 +50,7 @@ const indentitiAdd = async (identify: IndentificationProps, userUid: string): Pr
       docId: userUid,
       name: identify.name,
       age: identify.age,
+      phone: identify.phone,
       peso: identify.peso.replace(/\D/g, ''),
       altura: identify.altura.replace(/\D/g, ''),
       idioma: identify.idioma,

@@ -54,6 +54,7 @@ const CreateProfile = () => {
   const islogged = useSelector(useloginSlice)
   const [upInfo, setUpInfo] = useState<number>();
   const [img, setImg] = useState<ImageProps[]>([]);
+  const [fone, setFone] = useState<string>('');
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -62,15 +63,16 @@ const CreateProfile = () => {
     return Math.random().toString(36).substr(2, 9)
   }
 
-  const addidentify = (name: string, age: string, peso: string, altura: string, idioma: string, gender: string, smoking: string) => {
-    indentitiAdd({ name, age, peso, altura, idioma, gender, smoking }, islogged.userLogged).then((result) => {
+  const addidentify = (name: string, age: string, phone: string, peso: string, altura: string, idioma: string, gender: string, smoking: string) => {
+    indentitiAdd({ name, age, phone, peso, altura, idioma, gender, smoking }, islogged.userLogged).then((result) => {
       console.log('result :>> ', result);
       toast.success('Identificação salva com sucesso!')
     }).catch((err) => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
-      setName(''), setAge(''), setPeso(''), setAltura(''), setIdioma(''), setGender(''), setSmoking('')
+      setName(''), setAge(''), setFone(''), setPeso(''), setAltura(''), setIdioma(''), setGender(''), setSmoking('')
+        
     })
   }
 
@@ -291,9 +293,11 @@ const CreateProfile = () => {
           <div className="flex flex-col items-center justify-center bg-white rounded-lg mb-5">
             <div className="w-full md:flex  items-center relative  ">
               <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg px-1">Pra começar, identifique-se, garota</h1>
-              <div className="flex flex-col h-32  my-1 md:mt-8 justify-center items-center md:w-1/3">
+              <div className="flex flex-col h-32  mt-4 md:mt-8 justify-center items-center md:w-1/3">
                 <Input placeholder="Nome" onChange={(e) => { setName(e.target.value) }} value={name} />
                 <Input placeholder=" Idade" onChange={(e) => { setAge(e.target.value) }} value={age} />
+                <Input placeholder=" telefone com DDD" onChange={(e) => { setFone(e.target.value) }} value={fone} />
+
               </div>
 
               <div className="flex flex-col h-32 mt-0  md:mt-8 justify-center items-center md:w-1/3">
@@ -316,7 +320,7 @@ const CreateProfile = () => {
                 <Input placeholder=" Fumante?" onChange={(e) => { setSmoking(e.target.value) }} value={smoking} />
               </div>
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addidentify(name, age, peso, altura, idioma, gender, smoking) }}>Salvar Indentificação</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addidentify(name, age, fone, peso, altura, idioma, gender, smoking, ) }}>Salvar Indentificação</button>
           </div>
 
           <div className=" flex flex-col items-center justify-center bg-white rounded-lg mb-5">

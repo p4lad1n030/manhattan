@@ -78,24 +78,24 @@ const Home = () => {
   }, []);
   return (
     <>
+      <Menu />
       <section className="flex flex-col justify-around ">
-        <Menu />
-        <div className="w-full md:w-1/2 mx-auto  bg-slate-400">
-          <div className="">
+        <div className="w-full md:w-1/2 mx-auto">
+          <div className="w-full">
             <Carousel
               showArrows={true} showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={true} interval={3000} useKeyboardArrows={true} emulateTouch={true} transitionTime={1000} swipeScrollTolerance={5} stopOnHover={true}
-              className=""
+              className=" h-[500px] flex justify-center items-center w-full"
             >
-              <div className="flex justify-center items-center ">
-                <img src={m1} alt="ex1" className="h-60" />
+              <div className="flex justify-center items-center">
+                <img src={m1} alt="ex1" className="h-[400px] w-full object-cover" />
                 <p className="legend font-robotoc font-semibold ">Sinta a emoção do que esta por vir!</p>
               </div>
               <div className="flex justify-center items-center ">
-                <img src={m2} alt="ex1" className="h-60" />
+                <img src={m2} alt="ex1" className="h-[400px] w-full object-cover" />
                 <p className="legend">Legend 2</p>
               </div>
               <div className="flex justify-center items-center  ">
-                <img src={m3} className="h-60  my-auto" alt="ex1" />
+                <img src={m3} className="h-[400px] w-full object-cover" alt="ex1" />
                 <p className="legend">Legend 3</p>
               </div>
             </Carousel>
@@ -107,7 +107,7 @@ const Home = () => {
           {user.map((g) => (
             <>
               <Link to={`/profile/${g.docId}`} className="flex flex-col justify-center shadow-lg text-white text-center p-1 w-full md:w-1/2 bg-gcor  md:h-auto rounded-md" key={g.docId}>
-                <div className=" ">
+                <div className=" flex flex-col items-center">
                   <div className=" animate-pulse " style={{ display: loadImages.includes(g.img[0].uid) ? 'none' : 'block' }}>
                     <div className="w-full object-cover bg-slate-300 h-[250px] rounded-lg border"></div>
                   </div>
@@ -121,19 +121,19 @@ const Home = () => {
                   <div className="flex mx-auto w-full p-8 ">
                     <div className="flex w-1/2 gap-2 justify-center">
                       <MdOutlinePriceChange size={24} className="" />
-                      <p className="">
-                        {(Number(g.uma) / 100).toFixed(2)}
+                      <p className="">R$
+                        { ` ${(Number( g.uma) / 100).toFixed(2)}`}
                       </p>
                     </div>
                     <div className="flex w-1/2 gap-2 justify-center">
                       <FaRegAddressCard size={24} />
                       <p className="">
-                        {g.age}
+                        {g.age} Anos
                       </p>
                     </div>
                   </div>
-                  <div className="overflow-auto scrollbar-hide ">
-                    <p className=" ">Lorem ipsum dolor sit,  </p>
+                  <div className="bg-white rounded-md w-4/5">
+                    <p className=" text-ppink text-center font-robotoc text-lg">{g.message}</p>
                   </div>
                 </div>
               </Link>
