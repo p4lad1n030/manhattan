@@ -27,6 +27,7 @@ const Profile = () => {
       }
       const data: ProfileProps = {
         age: docSnap.data()!.age,
+        phone: docSnap.data()!.phone,
         altura: docSnap.data()!.altura,
         docId: docSnap.data()!.docId,
         duas: docSnap.data()!.duasHoras,
@@ -47,6 +48,7 @@ const Profile = () => {
         tamCab: docSnap.data()!.tamCab,
         tamPe: docSnap.data()!.tamPe,
         uma: docSnap.data()!.umaHora,
+        programas: docSnap.data()!.programas
       }
       setUser(data)
     } catch (error) {

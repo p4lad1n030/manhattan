@@ -8,6 +8,7 @@ import Register from "../pages/register";
 import Profile from "../pages/profile";
 import CreateProfile from "../pages/createprofile";
 import Private from "./private";
+import AdminProfile from "../pages/adminProfile";
 
  
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <Private><Admin /></Private>,
+  },
+  {
+    path: "/admin/:id",
+    element: <AdminProfile />,
   },
 
 ]);

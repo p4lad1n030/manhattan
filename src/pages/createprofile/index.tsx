@@ -429,7 +429,7 @@ const CreateProfile = () => {
                 </thead>
                 <tbody className="text-center font-robotoc bg-ppink06 text-white">
                   <tr className="border-2 ">
-                    <td className="font-light px-6 py-4 whitespace-nowrap">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+                    <td className="font-light px-6 py-4 whitespace-nowrap">The Sliding </td>
                     <td className="font-light px-6 py-4 whitespace-nowrap">Malcolm Lockyer</td>
                     <td className="font-light px-6 py-4 whitespace-nowrap">1961</td>
                   </tr>

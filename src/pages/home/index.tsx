@@ -7,7 +7,7 @@ import m2 from '../../assets/image5.png';
 import m3 from '../../assets/m3.png';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services";
-import { AppearanceProps, IndentificationProps, MessageProps, PricesProps } from "../createprofile/createProfile";
+import { AppearanceProps, IndentificationProps, MessageProps, PgProps, PricesProps } from "../createprofile/createProfile";
 import { ImageProps } from "../createprofile";
 import { MdOutlinePriceChange } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -21,12 +21,13 @@ interface ImgDB {
 interface ServicesProps {
   services: string[]
 }
-export interface ProfileProps extends IndentificationProps, MessageProps, AppearanceProps, PricesProps, ImgDB, ServicesProps { }
+export interface ProfileProps extends IndentificationProps, MessageProps, AppearanceProps, PricesProps, ImgDB, ServicesProps {programas: PgProps }
 const Home = () => {
   const [user, setUser] = useState<ProfileProps[]>([]);
   const [loadImages, setLoadImages] = useState<string[]>([]);
 
   const handleData = async () => {
+    
     console.count('handleData');
     let data = [] as ProfileProps[]
     try {
@@ -35,6 +36,7 @@ const Home = () => {
       querySnapshot.forEach((d) => {
         data.push({
           age: d.data().age,
+          phone:d.data().phone,
           altura: d.data().altura,
           docId: d.data().docId,
           duas: d.data().duasHoras,
@@ -55,6 +57,7 @@ const Home = () => {
           tamCab: d.data().tamCab,
           tamPe: d.data().tamPe,
           uma: d.data().umaHora,
+          programas: d.data().programas
         })
         setUser(data)
       })
@@ -104,36 +107,37 @@ const Home = () => {
 
         <article className="flex justify-center items-center mb-2 w-full gap-1 flex-wrap md:flex-nowrap p-2">
 
-          {user.map((g) => (
+          {user.map((p) => (
             <>
-              <Link to={`/profile/${g.docId}`} className="flex flex-col justify-center shadow-lg text-white text-center p-1 w-full md:w-1/2 bg-gcor  md:h-auto rounded-md" key={g.docId}>
+              <Link to={`/profile/${p.docId}`} className="flex flex-col justify-center shadow-lg text-white text-center p-1 w-full md:w-1/2 bg-gcor  md:h-auto rounded-md" key={p.docId}>
                 <div className=" flex flex-col items-center">
-                  <div className=" animate-pulse " style={{ display: loadImages.includes(g.img[0].uid) ? 'none' : 'block' }}>
-                    <div className="w-full object-cover bg-slate-300 h-[250px] rounded-lg border"></div>
+                  <div className=" animate-pulse " style={{ display: loadImages.includes(p.img[0].uid) ? 'none' : 'block' }}>
+                    <div className="w-full object-cover bg-slate-300 h-[250px] rounded-lg "></div>
                   </div>
+
                   <img
-                    src={g.img[0].url as string}
-                    alt="img" className="w-full object-cover  h-[250px] rounded-lg border"
-                    onLoad={() => handleImgLoad(g.img[0].uid)}
-                    style={{ display: loadImages.includes(g.img[0].uid) ? 'block' : 'none' }}
+                    src={p.img[0].url as string}
+                    alt="img" className="w-full object-cover  h-[250px] rounded-lg "
+                    onLoad={() => handleImgLoad(p.img[0].uid)}
+                    style={{ display: loadImages.includes(p.img[0].uid) ? 'block' : 'none' }}
                   />
-                  <h1 className="">{g.name}</h1>
+                  <h1 className="">{p.name}</h1>
                   <div className="flex mx-auto w-full p-8 ">
                     <div className="flex w-1/2 gap-2 justify-center">
                       <MdOutlinePriceChange size={24} className="" />
                       <p className="">R$
-                        { ` ${(Number( g.uma) / 100).toFixed(2)}`}
+                        { ` ${(Number( p.uma) / 100).toFixed(2)}`}
                       </p>
                     </div>
                     <div className="flex w-1/2 gap-2 justify-center">
                       <FaRegAddressCard size={24} />
                       <p className="">
-                        {g.age} Anos
+                        {p.age} Anos
                       </p>
                     </div>
                   </div>
                   <div className="bg-white rounded-md w-4/5">
-                    <p className=" text-ppink text-center font-robotoc text-lg">{g.message}</p>
+                    <p className=" text-ppink text-center font-robotoc text-lg">{p.message}</p>
                   </div>
                 </div>
               </Link>

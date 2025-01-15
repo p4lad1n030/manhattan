@@ -20,7 +20,12 @@ const Login = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    signInWithEmailAndPassword(auth, userEmail, passWord).then(() => {      
+    signInWithEmailAndPassword(auth, userEmail, passWord).then(() => {   
+      if (auth.currentUser?.uid === '9ZDHa32eMlWJuvYk7AGmWhmN5NM2') {
+        navigate('/admin', { replace: true })
+        return
+      }
+      
       navigate('/createprofile', { replace: true })
     }).catch((err) => {
       setLoading(false)

@@ -171,4 +171,11 @@ const pricesAdd = async(prices:PricesProps, userUid:string) => {
     return Promise.reject(error);
   }
 }
-export {pricesAdd}
+export { pricesAdd }
+
+export interface PgProps {
+  date: Date
+  quantity: string
+  money: string
+
+}
