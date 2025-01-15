@@ -21,7 +21,7 @@ interface ImgDB {
 interface ServicesProps {
   services: string[]
 }
-export interface ProfileProps extends IndentificationProps, MessageProps, AppearanceProps, PricesProps, ImgDB, ServicesProps {programas: PgProps }
+export interface ProfileProps extends IndentificationProps, MessageProps, AppearanceProps, PricesProps, ImgDB, ServicesProps {programas: PgProps[] }
 const Home = () => {
   const [user, setUser] = useState<ProfileProps[]>([]);
   const [loadImages, setLoadImages] = useState<string[]>([]);

@@ -15,6 +15,7 @@ import { pgAdd, PgProps } from "../createprofile/createProfile";
 
 
 
+
 const AdminProfile = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ const AdminProfile = () => {
   const [pgs, setPgs] = useState<PgProps[]>([]);
 
   const handleData = async () => {
+    console.count('handleData');
     if (!id) return; // Certifique-se de que o id é válido 
     const docRef = doc(db, "profiles", id as string);
     try {
@@ -56,7 +58,7 @@ const AdminProfile = () => {
         tamCab: docSnap.data()!.tamCab,
         tamPe: docSnap.data()!.tamPe,
         uma: docSnap.data()!.umaHora,
-        programas: docSnap.data()!.programas
+        programas: docSnap.data()!.pg
 
       }
       setUser(data)
@@ -66,7 +68,7 @@ const AdminProfile = () => {
   }
   const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => { setDate(event.target.value ? new Date(event.target.value) : null); };
 
-  
+
 
   const formatarMoeda = (valor: any) => {
     if (!valor) return ''
@@ -80,9 +82,26 @@ const AdminProfile = () => {
     const valor = e.replace(/\D/g, '') // Remove tudo que não é dígito
     usestate(valor ? formatarMoeda(parseFloat(valor) / 100) : '') // Divide por 100 para considerar os centavos
   }
+  const addPg = (data: Date, money: string, quantidade: string) => {
+    if (!data || !money || !quantidade) {
+      toast.error('Preencha todos os Campos!')
+      return
+    }
+    console.log('Data: ', data, 'money: ', money, 'qnt: ', quantidade);
+    let obj: PgProps = {
+      date: data,
+      money,
+      quantity
+    }
+    setPgs((prev) => {
+      const newState = [...prev, obj]
+      return newState
+    })
+
+  }
 
   useEffect(() => {
-    console.log(pgs);
+
     handleData()
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.uid !== '9ZDHa32eMlWJuvYk7AGmWhmN5NM2') {
@@ -91,7 +110,19 @@ const AdminProfile = () => {
       }
     })
     return () => unsubscribe();
-  }, [pgs]);
+  }, []);
+  useEffect(() => {
+    console.log('pgs :>> ', pgs);
+    if (pgs.length < 1) {
+      return
+    }
+    pgAdd(pgs, id!).then(() => {
+      toast.success('Atualização Feita com sucesso!')
+    }).catch((err) => {
+      toast.error(err)
+    });
+console.log(user?.programas.map(d=>d));
+  }, [pgs, user]);
   return (
     <>
       <div className="flex flex-col mb-16">
@@ -116,17 +147,26 @@ const AdminProfile = () => {
               <thead className="bg-vviolet text-white font-ral">
                 <tr>
 
-                  <th className="border-r-2 whitespace-nowrap">Preço</th>
-                  <th className="whitespace-nowrap">Programas </th>
+                  <th className="border-r-2 whitespace-nowrap">Valor</th>
+                  <th className="border-r-2 whitespace-nowrap">Programas </th>
+                  <th className="whitespace-nowrap">Data </th>
                 </tr>
               </thead>
               <tbody className="text-center font-robotoc bg-ppink06 text-white">
-                {/* {user.map((p) => (
-                <tr className="border-2 " key={p.docId}>
-                  <td className="font-light px-6 py-4 whitespace-nowrap">{'lucro'}</td>
-                  <td className="font-light px-6 py-4 whitespace-nowrap">{'programas'}</td>
-                </tr>
-              ))} */}
+
+
+                {/* {user?.programas ?
+                  user?.programas.map((p) => (
+                    <tr className="border-2 " key={p.money}>
+                      <td className="font-light px-6 py-4 whitespace-nowrap">{p.money}</td>
+                      <td className="font-light px-6 py-4 whitespace-nowrap">{p.quantity}</td>
+                      <td className="font-light px-6 py-4 whitespace-nowrap">{`${p.date}`}</td>
+                    </tr>
+                  )) :
+                  <tr className="border-2 ">
+                    <td colSpan={3}><p className="font-robotoc text-center font-medium text-base w-full">Ainda não a dados</p></td>
+                  </tr>
+                } */}
               </tbody>
             </table>
           </div>
@@ -139,7 +179,7 @@ const AdminProfile = () => {
               <Input type="text" onChange={(e) => numberFormat(e.target.value, setMoney)} value={money} />
               <Input type="date" onChange={handleDate} />
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { pgrAdd(date!, money, quantity) }}>Adcionar</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addPg(date!, money, quantity) }}>Adcionar</button>
           </div>
         </div>
       </div>

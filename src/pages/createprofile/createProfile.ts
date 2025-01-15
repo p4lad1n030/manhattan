@@ -85,7 +85,7 @@ export { messageAdd };
 
 
 // Appearance
- export interface AppearanceProps {
+export interface AppearanceProps {
   eyes: string;
   colorHair: string;
   tamCab: string;
@@ -134,10 +134,10 @@ export { servicesAdd };
 
 // images
 const imagesAdd = async (img: ImageProps, userUid: string) => {
-  if (!img ) {
+  if (!img) {
     return Promise.reject(new Error("Escolha ao menos uma imagem, garota!"));
   }
-  
+
   try {
     const docRef = doc(db, "profiles", userUid);
     await setDoc(docRef, {
@@ -154,10 +154,10 @@ export { imagesAdd }
 export interface PricesProps {
   meia: string
   uma: string
-  duas:string
+  duas: string
 }
-const pricesAdd = async(prices:PricesProps, userUid:string) => {
-  if (!prices.meia && !prices.uma && !prices.duas ) {
+const pricesAdd = async (prices: PricesProps, userUid: string) => {
+  if (!prices.meia && !prices.uma && !prices.duas) {
     return Promise.reject(new Error("Preencha todos os valores, garota!"));
   }
   try {
@@ -179,3 +179,16 @@ export interface PgProps {
   money: string
 
 }
+const pgAdd = async (programas: PgProps[], id: string) => {
+  try {
+    console.count('pgAdd');
+    const docRef = doc(db, "profiles", id);
+    await setDoc(docRef, {
+      programas
+    }, { merge: true });
+  } catch (error) {
+    return error
+  }
+
+}
+export { pgAdd }
