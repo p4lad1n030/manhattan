@@ -5,11 +5,11 @@ import Menu from "../../components/Menu";
 import { auth, db } from "../../services";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ProfileProps } from "../home";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import toast from './../../../node_modules/react-hot-toast/src/index';
 import { TbTrashFilled } from "react-icons/tb";
 import Input from "../../components/Input";
-import { pgAdd, PgProps } from "../createprofile/createProfile";
+import { PgProps } from "../createprofile/createProfile";
 
 // import toast from ';
 
@@ -24,49 +24,13 @@ const AdminProfile = () => {
   const [date, setDate] = useState<Date | null>(null)
   const [quantity, setQuantity] = useState<string>('');
   const [pgs, setPgs] = useState<PgProps[]>([]);
+  const [trigger, setTrigger] = useState<boolean>(false);
 
-  const handleData = async () => {
-    console.count('handleData');
-    if (!id) return; // Certifique-se de que o id é válido 
-    const docRef = doc(db, "profiles", id as string);
-    try {
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-        console.log("No such document!");
-        return;
-      }
-      const data: ProfileProps = {
-        age: docSnap.data()!.age,
-        phone: docSnap.data()!.phone,
-        altura: docSnap.data()!.altura,
-        docId: docSnap.data()!.docId,
-        duas: docSnap.data()!.duasHoras,
-        etnia: docSnap.data()!.etnia,
-        eyes: docSnap.data()!.eyes,
-        gender: docSnap.data()!.gender,
-        colorHair: docSnap.data()!.hair,
-        idioma: docSnap.data()!.idioma,
-        img: docSnap.data()!.img,
-        meia: docSnap.data()!.meiaHora,
-        message: docSnap.data()!.message,
-        name: docSnap.data()!.name,
-        peso: docSnap.data()!.peso,
-        piercing: docSnap.data()!.piercing,
-        services: docSnap.data()!.services,
-        silicone: docSnap.data()!.silicone,
-        smoking: docSnap.data()!.smoking,
-        tamCab: docSnap.data()!.tamCab,
-        tamPe: docSnap.data()!.tamPe,
-        uma: docSnap.data()!.umaHora,
-        programas: docSnap.data()!.pg
 
-      }
-      setUser(data)
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-    }
-  }
-  const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => { setDate(event.target.value ? new Date(event.target.value) : null); };
+
+  const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value ? new Date(event.target.value) : null);
+  };
 
 
 
@@ -102,7 +66,6 @@ const AdminProfile = () => {
 
   useEffect(() => {
 
-    handleData()
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.uid !== '9ZDHa32eMlWJuvYk7AGmWhmN5NM2') {
         toast.error('Acesso negado')
@@ -110,19 +73,74 @@ const AdminProfile = () => {
       }
     })
     return () => unsubscribe();
-  }, []);
+  }, [id]);
+
   useEffect(() => {
-    console.log('pgs :>> ', pgs);
+
+    const unsub = onSnapshot(doc(db, "profiles", id as string), (doc) => {
+
+      try {
+        const data: ProfileProps = {
+          age: doc.data()!.age,
+          phone: doc.data()!.phone,
+          altura: doc.data()!.altura,
+          docId: doc.data()!.docId,
+          duas: doc.data()!.duasHoras,
+          etnia: doc.data()!.etnia,
+          eyes: doc.data()!.eyes,
+          gender: doc.data()!.gender,
+          colorHair: doc.data()!.hair,
+          idioma: doc.data()!.idioma,
+          img: doc.data()!.img,
+          meia: doc.data()!.meiaHora,
+          message: doc.data()!.message,
+          name: doc.data()!.name,
+          peso: doc.data()!.peso,
+          piercing: doc.data()!.piercing,
+          services: doc.data()!.services,
+          silicone: doc.data()!.silicone,
+          smoking: doc.data()!.smoking,
+          tamCab: doc.data()!.tamCab,
+          tamPe: doc.data()!.tamPe,
+          uma: doc.data()!.umaHora,
+          programas: doc.data()!.programas
+        }
+        setUser(data)
+        console.log('com slice' ,user?.programas.map(d => d.date)[0].toString().slice(18, 28));
+        console.log('sem slice' ,user?.programas.map(d => d.date)[0].toString());
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    });
+
+
+    // pgAdd(pgs, id!).then(() => {
+    //   toast.success('Atualização Feita com sucesso!')
+    // }).catch((err) => {
+    //   toast.error(err)
+    // });
+    
+    return () => unsub()
+
+  }, [pgs]);
+  useEffect(() => {
     if (pgs.length < 1) {
       return
     }
-    pgAdd(pgs, id!).then(() => {
-      toast.success('Atualização Feita com sucesso!')
-    }).catch((err) => {
-      toast.error(err)
-    });
-console.log(user?.programas.map(d=>d));
-  }, [pgs, user]);
+
+    const pgAdd = async (newProgramas: PgProps[], id: string) => {
+      try {
+        console.count('pgAdd'); const docRef = doc(db, "profiles", id); // Recuperar o documento atual 
+        const docSnap = await getDoc(docRef); let existingProgramas: PgProps[] = [];
+        if (docSnap.exists()) { existingProgramas = docSnap.data().programas || []; } // Adicionar os novos programas ao array existente 
+        const updatedProgramas = [...existingProgramas, ...newProgramas]; // Atualizar o documento com o novo array de programas 
+        await setDoc(docRef, { programas: updatedProgramas }, { merge: true });
+        toast.success('Atualização Feita com sucesso!')
+      }
+      catch (error) { console.log(error); return error; }
+    };
+    pgAdd(pgs, id as string)
+  }, [trigger]);
   return (
     <>
       <div className="flex flex-col mb-16">
@@ -143,44 +161,51 @@ console.log(user?.programas.map(d=>d));
             </div>
           </div>
           <div className="mt-8 flex flex-wrap justify-around items-center w-full md:p-8 mb-5 overflow-x-auto">
-            <table className="min-w-full  p-2 shadow-lg">
-              <thead className="bg-vviolet text-white font-ral">
-                <tr>
+            <div className="bg-gcor05 flex flex-col p-1  justify-center items-center rounded-md w-full">
+              <div className="flex flex-col md:flex-row md:gap-6 p-1 w-4/5 md:w-full">
+                <Input type="text" placeholder="Quantidade" onChange={(e) => setQuantity(e.target.value)} />
+                <Input type="text" onChange={(e) => numberFormat(e.target.value, setMoney)} value={money} />
+                <Input type="date" onChange={handleDate} />
+              </div>
+              <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
+                addPg(date!, money, quantity)
+                setTrigger(!trigger)
+               }}>Adcionar</button>
+            </div>
 
-                  <th className="border-r-2 whitespace-nowrap">Valor</th>
-                  <th className="border-r-2 whitespace-nowrap">Programas </th>
-                  <th className="whitespace-nowrap">Data </th>
-                </tr>
-              </thead>
-              <tbody className="text-center font-robotoc bg-ppink06 text-white">
-
-
-                {/* {user?.programas ?
-                  user?.programas.map((p) => (
-                    <tr className="border-2 " key={p.money}>
-                      <td className="font-light px-6 py-4 whitespace-nowrap">{p.money}</td>
-                      <td className="font-light px-6 py-4 whitespace-nowrap">{p.quantity}</td>
-                      <td className="font-light px-6 py-4 whitespace-nowrap">{`${p.date}`}</td>
-                    </tr>
-                  )) :
-                  <tr className="border-2 ">
-                    <td colSpan={3}><p className="font-robotoc text-center font-medium text-base w-full">Ainda não a dados</p></td>
-                  </tr>
-                } */}
-              </tbody>
-            </table>
           </div>
 
         </div>
-        <div className="p-1">
-          <div className="bg-gcor05 flex flex-col p-1  justify-center items-center rounded-md">
-            <div className="flex flex-col md:flex-row md:gap-6 p-1 w-1/2">
-              <Input type="text" placeholder="Quantidade" onChange={(e) => setQuantity(e.target.value)} />
-              <Input type="text" onChange={(e) => numberFormat(e.target.value, setMoney)} value={money} />
-              <Input type="date" onChange={handleDate} />
-            </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addPg(date!, money, quantity) }}>Adcionar</button>
-          </div>
+        <div className=" flex flex-wrap justify-around items-center w-full md:p-8 mb-5 overflow-x-auto">
+          <table className="min-w-full  p-2 shadow-lg">
+            <thead className="bg-vviolet text-white font-ral">
+              <tr>
+
+                <th className="border-r-2 whitespace-nowrap">Valor</th>
+                <th className="border-r-2 whitespace-nowrap">Programas </th>
+                <th className="whitespace-nowrap">Data </th>
+              </tr>
+            </thead>
+            <tbody className="text-center font-robotoc bg-ppink06 text-white">
+
+
+              {user?.programas ?
+                user?.programas.map((p,i) => (<tr className="border-2 " key={i}>
+                  <td className="font-light px-6 py-4 whitespace-nowrap">{p.money}</td>
+                  <td className="font-light px-6 py-4 whitespace-nowrap">{p.quantity}</td>
+                  {/* <td className="font-light px-6 py-4 whitespace-nowrap">{p.date}</td> */}
+                  {/* <td className="font-light px-6 py-4 whitespace-nowrap">{`${new Date(p.date)}`}</td> */}
+                  {/* <td className="font-light px-6 py-4 whitespace-nowrap">{`${new Date(Number(p.date.toString().slice(18, 28))) }`}</td> */}
+                  <td className="font-light px-6 py-4 whitespace-nowrap">{`${new Date(Number(p.date.toString().slice(18, 28))).toLocaleDateString() }`}</td>
+                </tr>
+                )
+                ) :
+                <tr className="border-2 ">
+                  <td colSpan={3}><p className="font-robotoc text-center font-medium text-base w-full">Ainda não a dados</p></td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
       </div>
       <Footer />

@@ -179,16 +179,17 @@ export interface PgProps {
   money: string
 
 }
-const pgAdd = async (programas: PgProps[], id: string) => {
-  try {
-    console.count('pgAdd');
-    const docRef = doc(db, "profiles", id);
-    await setDoc(docRef, {
-      programas
-    }, { merge: true });
-  } catch (error) {
-    return error
-  }
+// const pgAdd = async (programas: PgProps[], id: string) => {
+//   try {
+//     console.count('pgAdd');
+//     const docRef = doc(db, "profiles", id);
+//     await setDoc(docRef, {
+//       programas
+//     }, { merge: true });
+//   } catch (error) {
+//     console.log(error);
+//     return error
+//   }
 
-}
-export { pgAdd }
+// }
+// export { pgAdd }
