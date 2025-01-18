@@ -174,7 +174,7 @@ const pricesAdd = async (prices: PricesProps, userUid: string) => {
 export { pricesAdd }
 
 export interface PgProps {
-  date: Date
+  date: string
   quantity: string
   money: string
 

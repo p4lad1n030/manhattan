@@ -21,16 +21,16 @@ const AdminProfile = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState<ProfileProps>();
   const [money, setMoney] = useState<string>('');
-  const [date, setDate] = useState<Date | null>(null)
+  const [date, setDate] = useState<string>('')
   const [quantity, setQuantity] = useState<string>('');
   const [pgs, setPgs] = useState<PgProps[]>([]);
   const [trigger, setTrigger] = useState<boolean>(false);
 
 
 
-  const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value ? new Date(event.target.value) : null);
-  };
+  // const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDate(event.target.value ? new Date(event.target.value) : null);
+  // };
 
 
 
@@ -46,7 +46,7 @@ const AdminProfile = () => {
     const valor = e.replace(/\D/g, '') // Remove tudo que não é dígito
     usestate(valor ? formatarMoeda(parseFloat(valor) / 100) : '') // Divide por 100 para considerar os centavos
   }
-  const addPg = (data: Date, money: string, quantidade: string) => {
+  const addPg = (data: string, money: string, quantidade: string) => {
     if (!data || !money || !quantidade) {
       toast.error('Preencha todos os Campos!')
       return
@@ -122,7 +122,7 @@ const AdminProfile = () => {
     
     return () => unsub()
 
-  }, [pgs]);
+  }, []);
   useEffect(() => {
     if (pgs.length < 1) {
       return
@@ -138,6 +138,7 @@ const AdminProfile = () => {
         toast.success('Atualização Feita com sucesso!')
       }
       catch (error) { console.log(error); return error; }
+      setPgs([])
     };
     pgAdd(pgs, id as string)
   }, [trigger]);
@@ -153,7 +154,7 @@ const AdminProfile = () => {
 
             <h1 className="text-5xl font-ral font-bold text-white drop-shadow-md">{user?.name}</h1>
             <h3 className="text-3xl font-ral font-bold text-white drop-shadow-md">
-              <Link to={`https://api.whatsapp.com/send?phone=${user?.phone}`}>{user?.phone}</Link>
+              <Link to={`https://api.whatsapp.com/send?phone=${user?.phone}`}>{user?.phone} </Link>
             </h3>
 
             <div className="flex flex-col justify-around items-center h-full gap-2 w-full">
@@ -165,11 +166,12 @@ const AdminProfile = () => {
               <div className="flex flex-col md:flex-row md:gap-6 p-1 w-4/5 md:w-full">
                 <Input type="text" placeholder="Quantidade" onChange={(e) => setQuantity(e.target.value)} />
                 <Input type="text" onChange={(e) => numberFormat(e.target.value, setMoney)} value={money} />
-                <Input type="date" onChange={handleDate} />
+                <Input type="date" onChange={(e)=>setDate(e.target.value)} />
               </div>
               <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => {
-                addPg(date!, money, quantity)
+                addPg(date, money, quantity)
                 setTrigger(!trigger)
+                
                }}>Adcionar</button>
             </div>
 
@@ -193,10 +195,7 @@ const AdminProfile = () => {
                 user?.programas.map((p,i) => (<tr className="border-2 " key={i}>
                   <td className="font-light px-6 py-4 whitespace-nowrap">{p.money}</td>
                   <td className="font-light px-6 py-4 whitespace-nowrap">{p.quantity}</td>
-                  {/* <td className="font-light px-6 py-4 whitespace-nowrap">{p.date}</td> */}
-                  {/* <td className="font-light px-6 py-4 whitespace-nowrap">{`${new Date(p.date)}`}</td> */}
-                  {/* <td className="font-light px-6 py-4 whitespace-nowrap">{`${new Date(Number(p.date.toString().slice(18, 28))) }`}</td> */}
-                  <td className="font-light px-6 py-4 whitespace-nowrap">{`${new Date(Number(p.date.toString().slice(18, 28))).toLocaleDateString() }`}</td>
+                  <td className="font-light px-6 py-4 whitespace-nowrap">{`${p.date}`}</td>
                 </tr>
                 )
                 ) :
