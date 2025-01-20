@@ -21,13 +21,13 @@ interface ImgDB {
 interface ServicesProps {
   services: string[]
 }
-export interface ProfileProps extends IndentificationProps, MessageProps, AppearanceProps, PricesProps, ImgDB, ServicesProps {programas: PgProps[] }
+export interface ProfileProps extends IndentificationProps, MessageProps, AppearanceProps, PricesProps, ImgDB, ServicesProps { programas: PgProps[] }
 const Home = () => {
   const [user, setUser] = useState<ProfileProps[]>([]);
   const [loadImages, setLoadImages] = useState<string[]>([]);
 
   const handleData = async () => {
-    
+
     console.count('handleData');
     let data = [] as ProfileProps[]
     try {
@@ -36,7 +36,7 @@ const Home = () => {
       querySnapshot.forEach((d) => {
         data.push({
           age: d.data().age,
-          phone:d.data().phone,
+          phone: d.data().phone,
           altura: d.data().altura,
           docId: d.data().docId,
           duas: d.data().duasHoras,
@@ -105,28 +105,43 @@ const Home = () => {
           </div>
         </div>
 
-        <article className="flex justify-center items-center mb-2 w-full gap-1 flex-wrap md:flex-nowrap p-2">
+        <article className="flex justify-evenly items-center mb-2 w-full gap-1 flex-wrap  p-1 ">
 
           {user.map((p) => (
             <>
-              <Link to={`/profile/${p.docId}`} className="flex flex-col justify-center shadow-lg text-white text-center p-1 w-full md:w-1/2 bg-gcor  md:h-auto rounded-md" key={p.docId}>
+              <Link to={`/profile/${p.docId}`} className="flex flex-col justify-center shadow-lg text-white text-center p-1 w-full rounded-md bg-gcor  md:w-[300px]   " key={p.docId}>
+
+
+
+
                 <div className=" flex flex-col items-center">
-                  <div className=" animate-pulse " style={{ display: loadImages.includes(p.img[0].uid) ? 'none' : 'block' }}>
+                  <div className=" animate-pulse " style={{ display: loadImages.length > 0 ? 'none' : 'block' }}>
                     <div className="w-full object-cover bg-slate-300 h-[250px] rounded-lg "></div>
                   </div>
 
-                  <img
-                    src={p.img[0].url as string}
-                    alt="img" className="w-full object-cover  h-[250px] rounded-lg "
-                    onLoad={() => handleImgLoad(p.img[0].uid)}
-                    style={{ display: loadImages.includes(p.img[0].uid) ? 'block' : 'none' }}
-                  />
+                  {
+                    p.img ? <img
+                      src={p.img ? p.img[0].url : 'https://placehold.co/600x400?text=Imagem\n+da+\n+Garota+aqui'}
+                      alt="img" className="w-full object-cover  h-[250px] rounded-lg "
+                      onLoad={() => handleImgLoad(p.img ? p.img[0]?.uid : '')}
+                      style={{ display: loadImages ? 'block' : 'none' }}
+                    />
+                      :
+                      <img
+                        src={'https://placehold.co/600x400?text=Imagem\n+da+\n+Garota+aqui'}
+                        alt="img" className="w-full object-cover  h-[250px] rounded-lg "
+                        onLoad={() => handleImgLoad(p.img ? p.img[0]?.uid : '')}
+                        style={{ display: loadImages ? 'block' : 'none' }}
+                      />
+
+                  }
+
                   <h1 className="">{p.name}</h1>
                   <div className="flex mx-auto w-full p-8 ">
                     <div className="flex w-1/2 gap-2 justify-center">
                       <MdOutlinePriceChange size={24} className="" />
-                      <p className="">R$
-                        { ` ${(Number( p.uma) / 100).toFixed(2)}`}
+                      <p className="">
+                        {` ${(Number(p.uma) / 100).toFixed(2)}`}
                       </p>
                     </div>
                     <div className="flex w-1/2 gap-2 justify-center">
@@ -140,13 +155,13 @@ const Home = () => {
                     <p className=" text-ppink text-center font-robotoc text-lg">{p.message}</p>
                   </div>
                 </div>
-              </Link>
+              </Link >
             </>
           ))}
 
         </article>
 
-      </section>
+      </section >
 
 
     </>
@@ -183,4 +198,14 @@ export default Home;
           </div>
         </article>
 
-    </section > */
+    </section > 
+    
+    
+    
+     <img
+                    src={p.img ? p.img[0].url as string : 'https://placehold.co/600x400?text=Imagem\n+da+\n+Garota+aqui'}
+                    alt="img" className="w-full object-cover  h-[250px] rounded-lg "
+                    onLoad={() => handleImgLoad(p.img[0].uid)}
+                    style={{ display: loadImages.includes(p.img[0].uid) ? 'block' : 'none' }}
+                  /> 
+    */

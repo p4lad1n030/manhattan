@@ -16,10 +16,12 @@ import { useSelector } from "react-redux";
 import { isLogged, useloginSlice } from "../../redux/loginSlice";
 import toast from './../../../node_modules/react-hot-toast/src/index';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { auth, storage } from "../../services";
+import { auth, db, storage } from "../../services";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { ProfileProps } from "../home";
+import { doc, onSnapshot } from "firebase/firestore";
 
 
 
@@ -55,6 +57,8 @@ const CreateProfile = () => {
   const [upInfo, setUpInfo] = useState<number>();
   const [img, setImg] = useState<ImageProps[]>([]);
   const [fone, setFone] = useState<string>('');
+  const [user, setUser] = useState<ProfileProps>();
+  const [uidUser, setUidUser] = useState<string>('');
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -64,15 +68,14 @@ const CreateProfile = () => {
   }
 
   const addidentify = (name: string, age: string, phone: string, peso: string, altura: string, idioma: string, gender: string, smoking: string) => {
-    indentitiAdd({ name, age, phone, peso, altura, idioma, gender, smoking }, islogged.userLogged).then((result) => {
-      console.log('result :>> ', result);
+    indentitiAdd({ name, age, phone, peso, altura, idioma, gender, smoking }, islogged.userLogged).then(() => {
       toast.success('Identificação salva com sucesso!')
     }).catch((err) => {
       console.log('err :>> ', err);
       toast.error(err.message)
     }).finally(() => {
       setName(''), setAge(''), setFone(''), setPeso(''), setAltura(''), setIdioma(''), setGender(''), setSmoking('')
-        
+
     })
   }
 
@@ -259,19 +262,70 @@ const CreateProfile = () => {
       console.count('unsub');
       if (user) {
         const uid = user.uid;
+        setUidUser(uid)
         dispatch(isLogged(uid))
+
+
+
+
       } else {
         navigate('/', { replace: true })
       }
     })
+
+
+
     return () => {
       unsub()
+
     };
   }, []);
 
   useEffect(() => {
     console.count('selectedservices');
   }, [selectedServices]);
+  useEffect(() => {
+    if (!uidUser) {
+      return
+    }
+    const unsub2 = onSnapshot(doc(db, "profiles", uidUser), (doc) => {
+
+      try {
+        const data: ProfileProps = {
+          age: doc.data()!.age,
+          phone: doc.data()!.phone,
+          altura: doc.data()!.altura,
+          docId: doc.data()!.docId,
+          duas: doc.data()!.duasHoras,
+          etnia: doc.data()!.etnia,
+          eyes: doc.data()!.eyes,
+          gender: doc.data()!.gender,
+          colorHair: doc.data()!.hair,
+          idioma: doc.data()!.idioma,
+          img: doc.data()!.img,
+          meia: doc.data()!.meiaHora,
+          message: doc.data()!.message,
+          name: doc.data()!.name,
+          peso: doc.data()!.peso,
+          piercing: doc.data()!.piercing,
+          services: doc.data()!.services,
+          silicone: doc.data()!.silicone,
+          smoking: doc.data()!.smoking,
+          tamCab: doc.data()!.tamCab,
+          tamPe: doc.data()!.tamPe,
+          uma: doc.data()!.umaHora,
+          programas: doc.data()!.programas
+        }
+        setUser(data)
+
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    });
+    return () => {
+      unsub2()
+    };
+  }, [uidUser]);
 
   return (
     <>
@@ -320,7 +374,7 @@ const CreateProfile = () => {
                 <Input placeholder=" Fumante?" onChange={(e) => { setSmoking(e.target.value) }} value={smoking} />
               </div>
             </div>
-            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addidentify(name, age, fone, peso, altura, idioma, gender, smoking, ) }}>Salvar Indentificação</button>
+            <button type="button" className="bg-vviolet p-2 text-white rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet mb-2 shadow-lg" onClick={() => { addidentify(name, age, fone, peso, altura, idioma, gender, smoking,) }}>Salvar Indentificação</button>
           </div>
 
           <div className=" flex flex-col items-center justify-center bg-white rounded-lg mb-5">
@@ -418,34 +472,37 @@ const CreateProfile = () => {
           </div>
           <div className="w-full md:flex justify-center  items-center relative bg-white  rounded-lg mb-5 ">
             <h1 className="font-ral italic bg-white absolute -top-3  md:left-0 rounded-lg text-center px-1">Financeiro</h1>
-            <div className="mt-8 flex flex-wrap justify-around items-center w-full md:p-8 mb-5 overflow-x-auto">
+            <div className=" flex flex-wrap justify-around items-center w-full md:p-8 mb-5 overflow-x-auto mt-4">
               <table className="min-w-full  p-2 shadow-lg">
                 <thead className="bg-vviolet text-white font-ral">
                   <tr>
-                    <th className="border-r-2 whitespace-nowrap">Programas</th>
-                    <th className="border-r-2 whitespace-nowrap">Data</th>
-                    <th className="whitespace-nowrap">Total </th>
+
+                    <th className="border-r-2 whitespace-nowrap">Data </th>
+                    <th className="border-r-2 whitespace-nowrap">Valor</th>
+                    <th className=" whitespace-nowrap">Programas </th>
                   </tr>
                 </thead>
                 <tbody className="text-center font-robotoc bg-ppink06 text-white">
-                  <tr className="border-2 ">
-                    <td className="font-light px-6 py-4 whitespace-nowrap">The Sliding </td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">Malcolm Lockyer</td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">1961</td>
-                  </tr>
-                  <tr className="border-2 ">
-                    <td className="font-light px-6 py-4 whitespace-nowrap">Witchy Woman</td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">The Eagles</td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">1972</td>
-                  </tr>
-                  <tr className="border-2 ">
-                    <td className="font-light px-6 py-4 whitespace-nowrap">Shining Star</td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">Earth, Wind, and Fire</td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">1975</td>
-                  </tr>
+
+
+                  {user?.programas ?
+                    user?.programas.map((p, i) => (<tr className="border-2 " key={i}>
+                      <td className="font-light px-6 py-4 whitespace-nowrap ">
+
+                        {`${p.date}`}
+                      </td>
+                      <td className="font-light px-6 py-4 whitespace-nowrap">{p.money}</td>
+                      <td className="font-light px-6 py-4 whitespace-nowrap flex relative justify-around gap-6 md:gap">
+                        {p.quantity}</td>
+                    </tr>
+                    )
+                    ) :
+                    <tr className="border-2 ">
+                      <td colSpan={3}><p className="font-robotoc text-center font-medium text-base w-full"> Não há dados</p></td>
+                    </tr>
+                  }
                 </tbody>
               </table>
-
             </div>
           </div>
           <Footer />
@@ -457,20 +514,3 @@ const CreateProfile = () => {
 }
 
 export default CreateProfile;
-
-
-/* 
-boa tarde, sua proposta é interessante. Porém esta desalinhada com o orçamento, eu cobrei 2000 do cliente pra desenvolver o sistema e entregar rodando na máquina do cliente e eu tenho a disposição no máximo 15%(300 reais) do valor do projeto pra contratação do ui/ux, acima disso eu mesmo desenho o layout e desenvolvo o projeto. Longe de mim colocar preço no teu trabalho acho que você merece ganhar muito bem, só estou chamando pra realidade.
-
-eu ainda não tenho ao certo o número de páginas e todos os detalhes do projeto porque vou me reunir hoje a noite com o cliente pra certar todos os detalhes, mas de qualquer forma se a tua proposta se alinhar com o orçamento do cliente podemos conversar sobre aguardo teu retorno
-
-
-
-      obrigado por seu interesse no projeto lembrando que estou contratando SOMENTE PARA O DESIGN, mas infelizmente a sua proposta está desalinhada com o orçamento do meu cliente
-
-      boa tarde, sua proposta é interessante. Porém esta desalinhada com o orçamento, eu cobrei 2000 do cliente pra desenvolver o sistema e entregar rodando na máquina do cliente e eu tenho a disposição no máximo 15%(300 reais) do valor do projeto pra contratação do ui/ux, acima disso eu mesmo desenho o layout e desenvolvo o projeto. Longe de mim colocar preço no teu trabalho acho que você merece ganhar muito bem, só estou chamando pra realidade.
-
-      outra questão é o teu prazo, eu não sou designer, mas tenho cursos na área e eu levo 5 dias pra desenvolver o layout da aplicação no figma, mas de verdade eu detesto fazer layout pra mim essa parte do design das aplicações é um parto
-
-      https://www.figma.com/design/XzNI9NkzTTfPwq6IugBXSY/Manhattan?node-id=0-1&t=Q0nC7dCdpGyd0lEw-1
-      {${upInfo} } */

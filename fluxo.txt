@@ -1,0 +1,9 @@
+coisas a fazer:
+
+- permitir exclusão posterior das imagens pela aplicação, quando o dono do perfil acessar()
+
+- arrumar o footer pra exibir o botão de contratar a garota ✓
+
+- pra apagar a imagens faça como fez com a tabela de programas receba o array de imagens remova a que quer e atualize as imagens
+
+- arrumar o react responsive pagination que parou de funcionar ✓

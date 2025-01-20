@@ -7,9 +7,11 @@ import { SiLoop } from "react-icons/si";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../services";
 import toast from './../../../node_modules/react-hot-toast/src/index';
+import { useDispatch } from "react-redux";
+import { isLogged } from "../../redux/loginSlice";
 
 const Login = () => {
-  
+  const dispatch = useDispatch()
   const [userEmail, setUserEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,22 +22,24 @@ const Login = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    signInWithEmailAndPassword(auth, userEmail, passWord).then(() => {   
+    signInWithEmailAndPassword(auth, userEmail, passWord).then((res) => {   
       if (auth.currentUser?.uid === '9ZDHa32eMlWJuvYk7AGmWhmN5NM2') {
         navigate('/admin', { replace: true })
+        dispatch(isLogged(res.user.uid))
         return
       }
-      
+      dispatch(isLogged(res.user.uid))
       navigate('/createprofile', { replace: true })
     }).catch((err) => {
       setLoading(false)
       const errorCode = err.code;
       const errorMessage = err.message;
       switch (errorCode) {
-        case 'auth/invalid-credential' : toast.error('Senha Invalida')
+        case 'auth/invalid-credential' : toast.error('Usuário não cadastrado!')
           break
         case 'auth/invalid-email' : toast.error('Email Invalido')
           break
+        default: "Erro ao conectar!"
         
       }
       console.log('erro code ' + errorCode, '\nerro message ' + errorMessage);
@@ -56,7 +60,12 @@ const Login = () => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        
+        switch (errorCode) {
+          case 'auth/popup-closed-by-user': toast.error('Login cancelado pelo usuário!')
+            break
+          default:  "Erro ao conectar!"
+
+        }
         console.log(errorCode, errorMessage);
         // The email of the user's account used.
         const email = error.customData.email;

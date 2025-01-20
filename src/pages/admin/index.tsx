@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { db } from "../../services";
 import { collection, DocumentData, getDocs, limit, query, startAfter } from "firebase/firestore";
 import Menu from "../../components/Menu";
@@ -13,17 +13,17 @@ import 'react-responsive-pagination/themes/classic.css'
 
 
 
+
 const Admin = () => {
   const [user, setUser] = useState<ProfileProps[]>([]);
   const [lastVisible, setLastVisible] = useState<DocumentData | null>(null);
   const [cursors, setCursors] = useState<DocumentData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const totalPages = 50
-  // const [totalPages, setTotalPages] = useState<number>(140);
-  const pageSize = 15;
+  const totalPages = 20
+  const pageSize = 7;
 
   const handleData = async (page: number) => {
-    
+
     const profilesRef = collection(db, 'profiles');
     let q = query(profilesRef, limit(pageSize));
     if (page > 1 && lastVisible) {
@@ -61,21 +61,16 @@ const Admin = () => {
         uma: d.data().umaHora,
         programas: d.data()!.programas
       })
-      setUser(data)
       setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
       const newCursors = [...cursors];
       newCursors[page - 1] = querySnapshot.docs[querySnapshot.docs.length - 1];
       setCursors(newCursors);
       setCurrentPage(page);
+      setUser(data)
     })
-    
-  }
-  
-  useEffect(() => {
 
-    handleData(1)
-  }, [user]);
-  
+  }
+
   return (
     <>
       <Menu />
@@ -92,27 +87,33 @@ const Admin = () => {
                 </tr>
               </thead>
               <tbody className="text-center font-robotoc bg-ppink06 text-white">
-                {user.map((p) => (
+                {
+                  user.map((p, i) => (
                   <tr className="border-2 " key={p.docId}>
-                    <td className="font-light px-6 py-4 whitespace-nowrap hover:font-semibold"><Link to={`/admin/${p.docId}`}>{p.name}</Link></td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">{'lucro'}</td>
-                    <td className="font-light px-6 py-4 whitespace-nowrap">{'programas'}</td>
+                      <td className="font-light px-6 py-4 whitespace-nowrap hover:font-semibold">
+                        <Link to={`/admin/${p.docId}`}>{p.name}</Link></td>
+                    <td className="font-light px-6 py-4 whitespace-nowrap">{p.programas ? p.programas[i]?.money : 'não há informações'}</td>
+                      <td className="font-light px-6 py-4 whitespace-nowrap">{p.programas ? p.programas[i]?.quantity : 'não há informações' }</td>
                   </tr>
-                ))}
+                  ))
+                  
+                }
               </tbody>
             </table>
           </div>
         </div>
-            <ResponsivePaginationComponent
-              current={currentPage}
-              total={totalPages}
-              onPageChange={handleData}
-            />
+        <div className="mb-20 -mt-10 z-0">
+          <ResponsivePaginationComponent
+            current={currentPage}
+            total={totalPages}
+            onPageChange={page =>handleData(page)}
+          />
+        </div>
         <Footer />
       </article>
     </>
   );
-  
+
 }
 Admin.propTypes = {
   user: PropTypes.array, lastVisible: PropTypes.object, cursors: PropTypes.array, currentPage: PropTypes.number,

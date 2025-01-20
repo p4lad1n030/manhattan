@@ -10,6 +10,7 @@ import { LiaSmokingSolid } from "react-icons/lia";
 import { SiBritishairways } from "react-icons/si";
 import { ImScissors } from "react-icons/im";
 import { LuFootprints } from "react-icons/lu";
+import Footer from "../../components/footer";
 
 
 
@@ -77,7 +78,10 @@ const Profile = () => {
       <Menu />
       <div className="flex md:flex-row flex-col p-1 md:gap-1 rounded-lg">
         <div className=" p-1 md:w-1/3 bg-gcor05 flex flex-col items-center rounded-lg">
-          <img src={user?.img[0].url} alt={user?.img[0].name} className="h-52 w-52 rounded-lg border-2" />
+          {!user?.img ?
+            <img src={'https://placehold.co/600x400?text=Imagem\n+da+\n+Garota+aqui'} alt={'imagem da garota'} className="h-52 w-52 rounded-lg border-2" />
+            : <img src={user?.img[0].url} alt={user?.img[0].name} className="h-52 w-52 rounded-lg border-2" />
+          }
           <h1 className="text-3xl font-ral font-bold text-white drop-shadow-md">{user?.name}</h1>
 
           <div className="flex flex-col justify-around h-full gap-2 w-full">
@@ -134,7 +138,8 @@ const Profile = () => {
           <div className="bg-gcor05 w-full ">
             <h1 className="text-white text-2xl font-ral font-bold text-center">O que ela topa fazer com você</h1>
             <div className="flex flex-col gap-4 md:grid md:grid-cols-2 p-1">
-              {user?.services ?
+              {
+                user?.services ?
                 user?.services.sort().map((s, i) => (
                   <div className="border-b-2 border-r-2 border-l-2 rounded-lg shadow-md" key={i}>
                     <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">{s}</p>
@@ -158,15 +163,20 @@ const Profile = () => {
         </div>
 
       </div>
-      <h2 className="text-center font-ral font-bold drop-shadow-md text-4xl" >Que tal dar uma espiada no que espera por você...</h2>
-      <div className="bg-gcor05 flex flex-wrap items-center justify-center p-4 gap-3 rounded-lg">
-        {user?.img.map((img, index) => (
+      
+      <div className="bg-gcor05 flex flex-wrap items-center justify-center p-4 gap-3 rounded-lg mb-16">
+        
+        { user?.img ?
+        user?.img.map((img, index) => (
           <div className="" key={index}>
             <img key={index} src={img.url} alt
               ={img.name} className="rounded-md h-80 w-52 border-white border-2" />
           </div>
-        ))}
+        )):
+        <p className="text-center font-robotoc font-semibold text-white text-6xl">Nenhuma Imagem cadastrada ainda!</p>
+        }
       </div>
+      <Footer profile/>
     </article>
   );
 }

@@ -38,14 +38,14 @@ import { useDispatch } from "react-redux";
 *
 const dispatch = useDispatch();
 
-*dispatch(nome-do-slice.actions-exportado(nome-do-objeto-modificado));
+*dispatch(isLogged(res.user.uid))
 */
 
 // como ler os dados do estado
 /*
 *import { useSelector } from "react-redux";
 
-*const islogged = useSelector(nome-do-slice.state exportado)
+*const islogged = useSelector(useloginSlice)
 
 *console.log(islogged)
 

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../services";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import toast from './../../../node_modules/react-hot-toast/src/index';
+import { SiLoop } from "react-icons/si";
 
 const Register = () => {
   // 1318X642
@@ -32,6 +33,8 @@ const Register = () => {
                 case 'auth/weak-password' : toast.error('Senha Fraca Utilize ao menos 6 caracteres')
                   break
                 case 'auth/email-already-in-use' : toast.error('Usuário já Cadastrado')
+                  break
+                case 'auth/invalid-email' : toast.error('E-mail invalido!')
                   break
                 
               }
@@ -72,7 +75,7 @@ const Register = () => {
           <p className="self-end md:mr-24 text-xs text-white font-robotoc shadow-lg">Já possui conta?
             <Link to={'/login'}><span className="font-semibold underline cursor-pointer"> Acessar</span></Link></p>
 
-          <button type="submit" className="bg-vviolet text-white p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet shadow-lg mt-2" aria-label="Acessar">Cadastrar</button>
+          <button type="submit" className="bg-vviolet text-white p-2 w-20 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet shadow-lg mt-2" aria-label="Acessar">{loading ? <SiLoop size={25} className="animate-spin  mx-auto ..." /> : 'Cadastrar'}</button>
         </form>
         <div className="flex flex-col justify-center items-center my-2">
           <h3 className="font-ral text-xl font-semibold text-white">Ou cadastre-se com</h3>
