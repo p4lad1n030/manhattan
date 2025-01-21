@@ -120,7 +120,8 @@ const Home = () => {
                   </div>
 
                   {
-                    p.img ? <img
+                    p.img ?
+                      <img
                       src={p.img ? p.img[0].url : 'https://placehold.co/600x400?text=Imagem\n+da+\n+Garota+aqui'}
                       alt="img" className="w-full object-cover  h-[250px] rounded-lg "
                       onLoad={() => handleImgLoad(p.img ? p.img[0]?.uid : '')}

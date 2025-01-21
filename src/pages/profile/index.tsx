@@ -76,17 +76,23 @@ const Profile = () => {
   const handleDeleteImage = async (i: ImageProps) => {
     const docRef = doc(db, "profiles", id as string);
     const imgsFromDb = user?.img
-    const updateImg = imgsFromDb?.filter((img:ImageProps)=>img.name !== i.name)
+    const updateImg = imgsFromDb?.filter((img: ImageProps) => img.name !== i.name)
 
-     try {
-          await updateDoc(docRef, {
-            img: updateImg
-          })
-          toast.success('Deletado com sucesso!')
-        } catch (error) {
-          toast.error(`${error}`)
-        }
-    
+    if (updateImg && updateImg?.length < 1) {
+      console.log('object');
+       toast.error('Proibido excluir Todas as fotos!')
+      return
+    }
+
+    try {
+      await updateDoc(docRef, {
+        img: updateImg
+      })
+      toast.success('Deletado com sucesso!')
+    } catch (error) {
+      toast.error(`${error}`)
+    }
+
     console.log(updateImg);
 
   }
@@ -191,7 +197,7 @@ const Profile = () => {
       <div className="bg-gcor05 flex flex-wrap items-center justify-center p-4 gap-3 rounded-lg mb-16">
         {/* abaixo verifico se há dono do perfil logado se sim permito excluir as fotos, se não pode apenas oobservar */}
         {islogged.userLogged ?
-          user?.img ?
+          user?.img && user?.img.length > 0 ?
             user?.img.map((img, index) => (
               <div className=" relative" key={index}>
                 <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
@@ -208,7 +214,7 @@ const Profile = () => {
             <p className="text-center font-robotoc font-semibold text-white text-6xl">Nenhuma Imagem cadastrada ainda!</p>
 
           :
-          user?.img ?
+          user?.img && user?.img.length > 0 ?
             user?.img.map((img, index) => (
               <div className="" key={index}>
                 <img key={index} src={img.url} alt

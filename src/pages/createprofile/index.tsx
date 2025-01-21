@@ -214,7 +214,7 @@ const CreateProfile = () => {
     } else {
       toast.error('Só é Permitido 5 Imagens!')
     }
-
+    
   }
   const handleSavePrice = (meia: string, uma: string, duas: string) => {
     if (!meia || !uma || !duas) {

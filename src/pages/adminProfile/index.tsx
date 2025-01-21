@@ -159,7 +159,7 @@ const AdminProfile = () => {
         <Menu />
         <div className="flex md:flex-row flex-col p-1 md:gap-1 rounded-lg">
           <div className=" p-1 md:w-1/3 bg-gcor05 flex flex-col items-center rounded-lg">
-            {user?.img ?
+            {user?.img && user?.img.length > 0 ?
               <img src={user?.img[0].url} alt={user?.img[0].name} className="h-52 w-52 rounded-lg border-2" />
               : <p className="text-center font-robotoc font-semibold text-white text-2xl">Nenhuma Imagem cadastrada ainda!</p>
             }
