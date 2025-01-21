@@ -43,6 +43,10 @@ const router = createBrowserRouter([
     path: "/admin/:id",
     element: <AdminProfile />,
   },
+  {
+    path: "*",
+    element: <Home />,
+  },
 
 ]);
 export default router;
