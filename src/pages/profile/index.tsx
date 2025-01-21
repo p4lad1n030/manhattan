@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { ProfileProps } from "../home";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../services";
 import { useEffect, useState } from "react";
 import Menu from "../../components/Menu";
@@ -11,6 +11,11 @@ import { SiBritishairways } from "react-icons/si";
 import { ImScissors } from "react-icons/im";
 import { LuFootprints } from "react-icons/lu";
 import Footer from "../../components/footer";
+import { useSelector } from "react-redux";
+import { useloginSlice } from "../../redux/loginSlice";
+import { TbTrashFilled } from "react-icons/tb";
+import { ImageProps } from "../createprofile";
+import toast from '../../../node_modules/react-hot-toast';
 
 
 
@@ -18,6 +23,8 @@ const Profile = () => {
   const { id } = useParams();
   const [user, setUser] = useState<ProfileProps>();
   const [noOffers, setNoOffers] = useState<string[]>([]);
+  // const [updateImg, setUpdateImg] = useState<ImageProps[]>([]);
+  const islogged = useSelector(useloginSlice)
   const handleData = async () => {
     if (!id) return; // Certifique-se de que o id é válido 
     const docRef = doc(db, "profiles", id as string);
@@ -61,16 +68,33 @@ const Profile = () => {
     let alServices = ['Sexo Vaginal com Preservativo', 'sexo Oral', 'Sexo Anal com Preservativo', 'Beijo Grego', 'Beijo na Boca', 'Masturbação', 'Sexo Oral sem Preservativo', 'Sexo Virtual', 'Penetração com Acessórios Sexuais', 'Utiliza Acessórios Eróticos', 'Podolatria', 'Striptease', 'Massagem Tradicional', 'Massagem Tântrica', 'Dupla Penetração', 'Tripla Penetração', 'Dominação', 'Usa Fantasias ou Uniformes', 'Faz Role Play', 'Permite Filmagens', 'Sexo com voyeurismo/ser voyeur', 'Bondage', 'Sadomasoquismo', 'Fisting', 'FaceFuck', 'Quirofilia', 'Squirt', 'Chuva Dourada', 'Chuva Marrom', 'Trampling', 'Acompanhante', 'Viagem']
 
     if (user?.services != undefined) {
-      const job = user?.services.map(s=>s) || []
+      const job = user?.services.map(s => s) || []
       const dontOfferServices = alServices.filter(sv => !job.includes(sv))
       setNoOffers(dontOfferServices)
     }
   }
+  const handleDeleteImage = async (i: ImageProps) => {
+    const docRef = doc(db, "profiles", id as string);
+    const imgsFromDb = user?.img
+    const updateImg = imgsFromDb?.filter((img:ImageProps)=>img.name !== i.name)
 
+     try {
+          await updateDoc(docRef, {
+            img: updateImg
+          })
+          toast.success('Deletado com sucesso!')
+        } catch (error) {
+          toast.error(`${error}`)
+        }
+    
+    console.log(updateImg);
+
+  }
   useEffect(() => {
+
     handleData();
     dontOffers()
-  
+
   }, [user]);
 
   return (
@@ -140,15 +164,15 @@ const Profile = () => {
             <div className="flex flex-col gap-4 md:grid md:grid-cols-2 p-1">
               {
                 user?.services ?
-                user?.services.sort().map((s, i) => (
-                  <div className="border-b-2 border-r-2 border-l-2 rounded-lg shadow-md" key={i}>
-                    <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">{s}</p>
-                  </div>
-                )) : <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">Nenhum serviço cadastrado</p>}
+                  user?.services.sort().map((s, i) => (
+                    <div className="border-b-2 border-r-2 border-l-2 rounded-lg shadow-md" key={i}>
+                      <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">{s}</p>
+                    </div>
+                  )) : <p className="text-white text-center font-robotoc font-medium text-2xl drop-shadow-md">Nenhum serviço cadastrado</p>}
             </div>
           </div>
 
-           <div className="bg-gcor05  w-full">
+          <div className="bg-gcor05  w-full">
             <h1 className="text-white text-2xl font-ral font-bold text-center">O que ela não topa fazer com você</h1>
             <div className="flex flex-col gap-4 md:grid md:grid-cols-2 p-1">
               {noOffers.sort().map((s, i) => (
@@ -163,20 +187,39 @@ const Profile = () => {
         </div>
 
       </div>
-      
+
       <div className="bg-gcor05 flex flex-wrap items-center justify-center p-4 gap-3 rounded-lg mb-16">
-        
-        { user?.img ?
-        user?.img.map((img, index) => (
-          <div className="" key={index}>
-            <img key={index} src={img.url} alt
-              ={img.name} className="rounded-md h-80 w-52 border-white border-2" />
-          </div>
-        )):
-        <p className="text-center font-robotoc font-semibold text-white text-6xl">Nenhuma Imagem cadastrada ainda!</p>
+        {/* abaixo verifico se há dono do perfil logado se sim permito excluir as fotos, se não pode apenas oobservar */}
+        {islogged.userLogged ?
+          user?.img ?
+            user?.img.map((img, index) => (
+              <div className=" relative" key={index}>
+                <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
+                  handleDeleteImage(img)
+                }} aria-label="Deletar">
+                  <TbTrashFilled className="  hover:text-red-600 text-white border-2 rounded-lg bg-red-600 hover:bg-white hover:border-red-600" size={48} />
+                </button>
+                <img key={index} src={img.url} alt
+                  ={img.name} className="rounded-md h-80 w-52 border-white border-2" />
+                {/* <p className="">{ img.name}</p> */}
+              </div>
+            ))
+            :
+            <p className="text-center font-robotoc font-semibold text-white text-6xl">Nenhuma Imagem cadastrada ainda!</p>
+
+          :
+          user?.img ?
+            user?.img.map((img, index) => (
+              <div className="" key={index}>
+                <img key={index} src={img.url} alt
+                  ={img.name} className="rounded-md h-80 w-52 border-white border-2" />
+              </div>
+            )) :
+            <p className="text-center font-robotoc font-semibold text-white text-6xl">Nenhuma Imagem cadastrada ainda!</p>
         }
+
       </div>
-      <Footer profile/>
+      <Footer profile />
     </article>
   );
 }

@@ -134,8 +134,10 @@ const AdminProfile = () => {
 
     const pgAdd = async (newProgramas: PgProps[], id: string) => {
       try {
-        console.count('pgAdd'); const docRef = doc(db, "profiles", id); // Recuperar o documento atual 
-        const docSnap = await getDoc(docRef); let existingProgramas: PgProps[] = [];
+        console.count('pgAdd');
+        const docRef = doc(db, "profiles", id); // Recuperar o documento atual 
+        const docSnap = await getDoc(docRef);
+        let existingProgramas: PgProps[] = [];
         if (docSnap.exists()) {
           existingProgramas = docSnap.data().programas || [];
         } // Adicionar os novos programas ao array existente 
