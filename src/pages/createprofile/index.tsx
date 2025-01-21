@@ -208,9 +208,11 @@ const CreateProfile = () => {
       }
       imagesAdd(image, islogged.userLogged).then(() => {
         toast.success(img.length > 1 ? 'imagens salvas com suacesso' : 'imagem salva com suacesso')
+        setImg([])
       }).catch((err) => {
         toast.error(err)
-      });
+        setImg([])
+      })
     } else {
       toast.error('Só é Permitido 5 Imagens!')
     }

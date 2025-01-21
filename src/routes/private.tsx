@@ -17,7 +17,7 @@ const Private = ({ children }: PrivateProps) => {
 
         navigate(`/admin`, { replace: true });
       } else {
-        toast.error('Acesso negado do private')
+        toast.error('Acesso negado')
         navigate('/', { replace: true });
       }
     });
