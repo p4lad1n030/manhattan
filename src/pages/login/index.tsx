@@ -63,7 +63,7 @@ const Login = () => {
         switch (errorCode) {
           case 'auth/popup-closed-by-user': toast.error('Login cancelado pelo usuário!')
             break
-          default:  "Erro ao conectar!"
+          default: toast.error('Erro ao conectar')
 
         }
         console.log(errorCode, errorMessage);

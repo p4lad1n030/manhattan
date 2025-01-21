@@ -58,12 +58,14 @@ const Footer = ({ profile }: FooterProps) => {
         
       }
 
-        {profile &&
+        {profile && !islogged.userLogged ?
           <Link to={'https://api.whatsapp.com/send?phone=5551997960975'}>
-            <button type="button" className="bg-vviolet p-2 w-26 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet text-nowrap" aria-label="Cadastro" onClick={() => { console.log('quero contratar'); }}>
+            <button type="button" className="bg-vviolet p-2 w-26 rounded-xl hover:bg-white hover:text-ppink font-robotoc border-white border hover:border-vviolet text-nowrap" aria-label="Contratar ela">
             Contratar ela
             </button>
           </Link>
+          :
+          null
         }
 
         <div className="flex items-center gap-2">
