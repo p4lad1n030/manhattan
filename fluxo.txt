@@ -7,3 +7,4 @@ coisas a fazer:
 - pra apagar a imagens faça como fez com a tabela de programas receba o array de imagens remova a que quer e atualize as imagens
 
 - arrumar o react responsive pagination que parou de funcionar ✓
+- corrigir o porque que quando salva uma imagem esta sbescrevendo a imagem

@@ -78,11 +78,11 @@ const Profile = () => {
     const imgsFromDb = user?.img
     const updateImg = imgsFromDb?.filter((img: ImageProps) => img.name !== i.name)
 
-    if (updateImg && updateImg?.length < 1) {
-      console.log('object');
-       toast.error('Proibido excluir Todas as fotos!')
-      return
-    }
+    // if (updateImg && updateImg?.length < 1) {
+      
+    //    toast.error('Proibido excluir Todas as fotos!')
+    //   return
+    // }
 
     try {
       await updateDoc(docRef, {
@@ -200,11 +200,11 @@ const Profile = () => {
           user?.img && user?.img.length > 0 ?
             user?.img.map((img, index) => (
               <div className=" relative" key={index}>
-                <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
+               {user?.img.length > 1 && <button type="button" className="absolute right-0 md:right-3 top-2" onClick={() => {
                   handleDeleteImage(img)
                 }} aria-label="Deletar">
                   <TbTrashFilled className="  hover:text-red-600 text-white border-2 rounded-lg bg-red-600 hover:bg-white hover:border-red-600" size={48} />
-                </button>
+                </button>}
                 <img key={index} src={img.url} alt
                   ={img.name} className="rounded-md h-80 w-52 border-white border-2" />
                 {/* <p className="">{ img.name}</p> */}
